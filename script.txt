@@ -1,0 +1,10 @@
+作り方
+CREATE TABLE materias (
+    subject_id INT PRIMARY KEY AUTO_INCREMENT,
+    subject_name VARCHAR(255) NULL,
+    professor_id INT NULL,
+    credit_hours INT NULL
+);
+
+消したい場合
+DROP TABLE IF EXISTS materias;
