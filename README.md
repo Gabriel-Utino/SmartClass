@@ -3,15 +3,11 @@
   <ol>
     <li>Criar banco de dados</li>
     <div>
-        CREATE TABLE alunos (<br>
-          id INT PRIMARY KEY,<br>
-          nome VARCHAR(255),<br>
-          ra VARCHAR(255),<br>
-          endereco VARCHAR(255),<br>
-          telefone VARCHAR(255),<br>
-          email VARCHAR(128),<br>
-          turma VARCHAR(255)<br>
-        );
+      CREATE TABLE materia (<br>
+        id INT PRIMARY KEY AUTO_INCREMENT,<br>
+        disciplina VARCHAR(255),<br>
+        professor VARCHAR(255)<br>
+      );
     </div>
     <li>Digitar "npm init"</li>
     <li>Digitar "npm install express cors nodemon mysql"</li>
