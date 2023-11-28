@@ -1,10 +1,15 @@
-作り方
-CREATE TABLE materias (
-    subject_id INT PRIMARY KEY AUTO_INCREMENT,
-    subject_name VARCHAR(255) NULL,
-    professor_id INT NULL,
-    credit_hours INT NULL
+Passo a passo dos comandos necessários para execução
+Criar banco de dados
+CREATE TABLE alunos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(255),
+    ra VARCHAR(255),
+    endereco VARCHAR(255),
+    telefone VARCHAR(255),
+    email VARCHAR(128),
+    turma VARCHAR(255)
 );
-
-消したい場合
-DROP TABLE IF EXISTS materias;
+Digitar "npm init" para criar o package.json
+Digitar "npm install express cors nodemon mysql" para instalar os frameworks
+Digitar "node server.js" para ativar o servidor
+Abrir o Chrome o arquivo de index.html
