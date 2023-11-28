@@ -1,0 +1,12 @@
+Passo a passo dos comandos necessários para execução
+1. Criar banco de dados
+  CREATE TABLE materia (
+    subject_id INT PRIMARY KEY AUTO_INCREMENT,
+    subject_name VARCHAR(255),
+    professor_id INT,
+    credit_hours INT
+  );
+2. Digitar "npm init" para criar o package.json
+3. Digitar "npm install express cors nodemon mysql" para instalar os frameworks
+4. Digitar "node server.js" para ativar o servidor
+5. Abrir Chrome o arquivo de index.html
