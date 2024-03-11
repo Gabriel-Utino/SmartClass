@@ -1,0 +1,65 @@
+
+body {
+  background-color: #d6d6d6;;
+}
+
+.container {
+  max-width: 1200px; /* 要素の最大幅を指定 */
+  margin: 0 auto; /* 要素を中央に配置 */
+  padding: 20px; /* 適切なパディングを追加 */
+}
+
+/* タイトルのスタイル */
+.container h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333333;
+}
+
+/* テーブルのスタイル */
+.container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.container th, .container td {
+  border: 1px solid #dddddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.container th {
+  background-color: #f2f2f2;
+}
+
+/* フォームのスタイル */
+.container form {
+  margin-bottom: 20px;
+}
+
+.container .form-group {
+  margin-bottom: 15px;
+}
+
+.container input[type="text"],
+.container input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+
+.container button {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container button:hover {
+  background-color: #0056b3;
+}
