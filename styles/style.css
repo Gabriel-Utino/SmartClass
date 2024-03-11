@@ -39,6 +39,7 @@ form input[type='navText'] {
   display: flex;
   width: 38%;
   padding-top: 3vh;
+  justify-content: space-around;
 }
 
 .nav-links li {
@@ -77,6 +78,7 @@ form input[type='navText'] {
 @media screen and (max-width: 1024px) {
   .nav-links {
     width: 55%;
+    justify-content: start;
   }
 }
 
