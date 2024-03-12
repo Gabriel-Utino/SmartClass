@@ -26,8 +26,12 @@ form input[type='navText'] {
 }
 
 .logo {
-  color: white;
   margin: 10px 10px 10px auto;
+}
+
+.logoHome img {
+  width: 70px;
+  height: auto;
 }
 
 .logo img {
@@ -88,7 +92,7 @@ body {
 .nav-links {
   position: absolute;
   left: 0;
-  height: 92vh;
+  height: 100%;
   top: 5vh;
   background-color: #000000;
   flex-direction: column;
@@ -115,8 +119,18 @@ body {
 
 @media screen and (max-width: 1024px) {
   .nav-links {
-    width: 55%;
     justify-content: start;
+    position: absolute;
+    left: 0;
+    height: 100%;
+    top: 5vh;
+    background-color: #000000;
+    flex-direction: column;
+    align-items: left;
+    width: 30%;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in;
+    padding-left: 2vh;
   }
 }
 
@@ -132,8 +146,8 @@ body {
   .nav-links {
     position: absolute;
     left: 0;
-    height: 92vh;
-    top: 5vh;
+    height: 100%;
+    top: 7%;
     background-color: #000000;
     flex-direction: column;
     align-items: left;
@@ -148,13 +162,21 @@ body {
   }
 
   .nav-links form {
-    padding-top: 30px;
+    padding-top: 10px;
     padding-bottom: 10px;
   }
 
   .nav-links2 {
     display: none;
     padding-left: 2vh;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .nav-links {
+    width: 43%;
+    top: 8%;
   }
 }
 
@@ -180,7 +202,7 @@ body {
 }
 
 
-footer {
+/* footer {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -196,4 +218,66 @@ footer {
 .footer img {
   width: 40px;
   height: auto;
+} */
+
+
+/*
+professores
+*/
+
+/* クラス.containerのスタイル */
+.container {
+  max-width: 800px; /* コンテナの最大幅 */
+  margin: 0 auto; /* 中央揃え */
+  padding: 0 15px; /* 左右の余白 */
+}
+
+/* タイトル(h1)のスタイル */
+h1 {
+  font-size: 2.5rem; /* フォントサイズ */
+  margin-bottom: 20px; /* 下部マージン */
+}
+
+/* セクションごとのスタイル */
+.mb-4 {
+  margin-bottom: 1rem; /* 下部マージン */
+}
+
+/* フォームのスタイル */
+.form-group {
+  margin-bottom: 20px; /* 下部マージン */
+}
+
+/* ボタンのスタイル */
+.btn-primary {
+  background-color: #007bff; /* ボタンの背景色 */
+  color: #fff; /* ボタンのテキスト色 */
+  border-color: #007bff; /* ボタンの枠線色 */
+}
+
+.btn-secondary {
+  background-color: #6c757d; /* ボタンの背景色 */
+  color: #fff; /* ボタンのテキスト色 */
+  border-color: #6c757d; /* ボタンの枠線色 */
+}
+
+/* 水平線(hr)のスタイル */
+hr {
+  margin-top: 40px; /* 上部マージン */
+  margin-bottom: 40px; /* 下部マージン */
+  border: 0; /* 枠線を削除 */
+  border-top: 1px solid #dee2e6; /* 上線のスタイル */
+}
+
+.container button {
+  background-color: rgb(78, 78, 78);
+  color: #ffffff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container button:hover {
+  background-color: black;
 }

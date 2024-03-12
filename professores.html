@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professor</title>
+    <!-- 追加：外部のスタイルシート -->
+    <!-- <link rel="stylesheet" href="styles/professores.css" /> -->
+    <link rel="stylesheet" href="styles/style.css" />
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
+</head>
+
+<body>
+
+    <!-- ナビゲーションバーのコードを貼り付け -->
+    <nav>
+        <ul class="nav-links">
+            <!-- 以降、ナビゲーションバーのコードをコピー -->
+            <form class="form_nav" action="/search" method="get">
+                <input type="navText" id="search" name="q" placeholder="Search">
+            </form>
+
+            <li><a href="#">Aluno
+                    <!-- <img class="rotate" src="icons\arrow.png"> -->
+                </a></li>
+            <ul class="nav-links2">
+                <li><a href="#">Notas</a></li>
+                <li><a href="#">Faltas</a></li>
+            </ul>
+            <li><a href="#">Calendario</a></li>
+            <li><a href="#">Finaceiro</a></li>
+            <li><a href="#">Chat</a></li>
+            <li><a href="cadastro.html">Cadastro</a></li>
+            <!-- ... -->
+        </ul>
+
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+
+        <a href="home.html">
+            <div class="logoHome">
+                <img src="icons/smartclass.jpg" alt="">
+            </div>
+        </a>
+
+        <div class="logo">
+            <img src="icons/icon.png">
+        </div>
+    </nav>
+
+    <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Gerenciamento de Professores</h1>
+
+        <div class="mb-4">
+            <h2>Adicionar Novo Professor:</h2>
+            <form id="addProfessorForm">
+                <div class="form-group">
+                    <label for="professorName">Nome:</label>
+                    <input type="text" class="form-control" id="professorName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="professorEmail">Email Constitucional:</label>
+                    <input type="email" class="form-control" id="professorEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="professorCPF">CPF:</label>
+                    <input type="text" class="form-control" id="professorCPF" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="professorSubject">Matéria Lecionada:</label>
+                    <input type="text" class="form-control" id="professorSubject" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="professorPhone">Telefone:</label>
+                    <input type="text" class="form-control" id="professorPhone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="professorBirthdate">Data de Nascimento:</label>
+                    <input type="text" class="form-control" id="professorBirthdate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="professorPersonalEmail">Email Pessoal:</label>
+                    <input type="email" class="form-control" id="professorPersonalEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="professorAddress">Endereço Completo:</label>
+                    <input type="text" class="form-control" id="professorAddress" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Adicionar Professor</button>
+            </form>
+        </div>
+
+        <hr>
+
+        <div class="mb-4">
+            <h2>Professores Existentes:</h2>
+            <div id="professoresList">
+                <!-- Lista de professores será exibida aqui -->
+            </div>
+        </div>
+
+        <div id="editProfessorForm" class="mb-4" style="display: none;">
+            <h2>Editar Professor</h2>
+            <form id="updateProfessorForm">
+                <input type="hidden" id="editProfessorId">
+                <div class="form-group">
+                    <label for="editProfessorName">Nome:</label>
+                    <input type="text" class="form-control" id="editProfessorName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProfessorEmail">Email Constitucional:</label>
+                    <input type="email" class="form-control" id="editProfessorEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProfessorCPF">CPF:</label>
+                    <input type="text" class="form-control" id="editProfessorCPF" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProfessorSubject">Matéria Lecionada:</label>
+                    <input type="text" class="form-control" id="editProfessorSubject" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProfessorPhone">Telefone:</label>
+                    <input type="text" class="form-control" id="editProfessorPhone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProfessorBirthdate">Data de Nascimento:</label>
+                    <input type="text" class="form-control" id="editProfessorBirthdate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProfessorPersonalEmail">Email Pessoal:</label>
+                    <input type="email" class="form-control" id="editProfessorPersonalEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProfessorAddress">Endereço Completo:</label>
+                    <input type="text" class="form-control" id="editProfessorAddress" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+    <!-- ... -->
+
+    <!-- 必要ないと判断
+  <footer class="footer">
+    <a href="home.html"><img src="icons/home.png" alt=""></a>
+    <a href="#"><img src="icons/calendar.png" alt=""></a>
+    <a href="#"><img src="icons/memo.png" alt=""></a>
+    <a href="#"><img src="icons/note.png" alt=""></a>
+  </footer>
+  -->
+    <script src="scripts/script.js"></script>
+    <script>
+        const apiUrl = 'http://localhost:3000/professores';
+
+        function displayProfessores(professores) {
+            const professoresList = document.getElementById('professoresList');
+            professoresList.innerHTML = '';
+
+            professores.forEach(professor => {
+                const professorElement = document.createElement('div');
+                professorElement.innerHTML = `
+                    <p>ID: ${professor.Id_prof}</p>
+                    <p>Nome: ${professor.Nome}</p>
+                    <p>Email Constitucional: ${professor.Email_constitucional}</p>
+                    <p>CPF: ${professor.CPF}</p>
+                    <p>Matéria Lecionada: ${professor.Materia_Lecionada}</p>
+                    <p>Telefone: ${professor.Telefone}</p>
+                    <p>Data de Nascimento: ${professor.Data_Nascimento}</p>
+                    <p>Email Pessoal: ${professor.Email_pessoal}</p>
+                    <p>Endereço Completo: ${professor.Endereco_Completo}</p>
+                    <button onclick="updateProfessor(${professor.Id_prof})">Editar</button>
+                    <button onclick="deleteProfessor(${professor.Id_prof})">Excluir</button>
+                    <hr>
+                `;
+                professoresList.appendChild(professorElement);
+            });
+        }
+
+        function getProfessores() {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => displayProfessores(data))
+                .catch(error => console.error('Erro:', error));
+        }
+
+        document.getElementById('addProfessorForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const professorName = document.getElementById('professorName').value;
+            const professorEmail = document.getElementById('professorEmail').value;
+            const professorCPF = document.getElementById('professorCPF').value;
+            const professorSubject = document.getElementById('professorSubject').value;
+            const professorPhone = document.getElementById('professorPhone').value;
+            const professorBirthdate = document.getElementById('professorBirthdate').value;
+            const professorPersonalEmail = document.getElementById('professorPersonalEmail').value;
+            const professorAddress = document.getElementById('professorAddress').value;
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    Nome: professorName,
+                    Email_constitucional: professorEmail,
+                    CPF: professorCPF,
+                    Materia_Lecionada: professorSubject,
+                    Telefone: professorPhone,
+                    Data_Nascimento: professorBirthdate,
+                    Email_pessoal: professorPersonalEmail,
+                    Endereco_Completo: professorAddress
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    getProfessores();
+                    document.getElementById('addProfessorForm').reset();
+                })
+                .catch(error => console.error('Erro:', error));
+        });
+
+        function updateProfessor(id) {
+            fetch(`${apiUrl}/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('editProfessorId').value = data.Id_prof;
+                    document.getElementById('editProfessorName').value = data.Nome;
+                    document.getElementById('editProfessorEmail').value = data.Email_constitucional;
+                    document.getElementById('editProfessorCPF').value = data.CPF;
+                    document.getElementById('editProfessorSubject').value = data.Materia_Lecionada;
+                    document.getElementById('editProfessorPhone').value = data.Telefone;
+                    document.getElementById('editProfessorBirthdate').value = data.Data_Nascimento;
+                    document.getElementById('editProfessorPersonalEmail').value = data.Email_pessoal;
+                    document.getElementById('editProfessorAddress').value = data.Endereco_Completo;
+                    document.getElementById('editProfessorForm').style.display = 'block';
+                })
+                .catch(error => console.error('Erro:', error));
+        }
+
+        document.getElementById('updateProfessorForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const professorId = document.getElementById('editProfessorId').value;
+            const professorName = document.getElementById('editProfessorName').value;
+            const professorEmail = document.getElementById('editProfessorEmail').value;
+            const professorCPF = document.getElementById('editProfessorCPF').value;
+            const professorSubject = document.getElementById('editProfessorSubject').value;
+            const professorPhone = document.getElementById('editProfessorPhone').value;
+            const professorBirthdate = document.getElementById('editProfessorBirthdate').value;
+            const professorPersonalEmail = document.getElementById('editProfessorPersonalEmail').value;
+            const professorAddress = document.getElementById('editProfessorAddress').value;
+
+            fetch(`${apiUrl}/${professorId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    Nome: professorName,
+                    Email_constitucional: professorEmail,
+                    CPF: professorCPF,
+                    Materia_Lecionada: professorSubject,
+                    Telefone: professorPhone,
+                    Data_Nascimento: professorBirthdate,
+                    Email_pessoal: professorPersonalEmail,
+                    Endereco_Completo: professorAddress
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    getProfessores();
+                    document.getElementById('editProfessorForm').style.display = 'none';
+                })
+                .catch(error => console.error('Erro:', error));
+        });
+
+        function cancelEdit() {
+            document.getElementById('editProfessorForm').style.display = 'none';
+        }
+
+        function deleteProfessor(id) {
+            fetch(`${apiUrl}/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    getProfessores();
+                })
+                .catch(error => console.error('Erro:', error));
+        }
+
+        getProfessores();
+    </script>
+<!--     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+</body>
+
+</html>

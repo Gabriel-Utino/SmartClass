@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'materias'
+    database: 'smartclass'
 });
 
 connection.connect((err) => {

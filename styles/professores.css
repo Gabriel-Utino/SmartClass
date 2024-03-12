@@ -1,0 +1,31 @@
+/* styles.css */
+
+body {
+    background-color: black;
+    color: white;
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.9); /* Modificado para preto */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form-group label {
+    color: white;
+}
+
+.form-control {
+    background-color: black; /* Adicionado para tornar o fundo do input preto */
+    color: white;
+}
+
+.btn-primary {
+    background-color: #007bff; /* Modificado para azul */
+    color: black; /* Adicionado para a fonte preta */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Modificado para cinza escuro */
+    color: white;
+}

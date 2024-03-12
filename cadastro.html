@@ -21,7 +21,9 @@
         <input type="navText" id="search" name="q" placeholder="Search">
       </form>
 
-      <li><a href="#">Aluno<!-- <img class="rotate" src="icons\arrow.png"> --></a></li>
+      <li><a href="#">Aluno
+          <!-- <img class="rotate" src="icons\arrow.png"> -->
+        </a></li>
       <ul class="nav-links2">
         <li><a href="#">Notas</a></li>
         <li><a href="#">Faltas</a></li>
@@ -38,6 +40,12 @@
       <div class="line3"></div>
     </div>
 
+    <a href="template.html">
+      <div class="logoHome">
+        <img src="icons/smartclass.jpg" alt="">
+      </div>
+    </a>
+
     <div class="logo">
       <img src="icons/icon.png">
     </div>
@@ -45,10 +53,10 @@
 
   <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
 
-  <div class="container mt-4">
-    <h1>Matérias</h1>
+  <div class="container">
+    <h1>Cadastro de matérias</h1>
 
-    <table class="table table-bordered table-striped">
+    <table class="table">
       <thead>
         <tr>
           <th>MatériaID</th>
@@ -63,7 +71,9 @@
       </tbody>
     </table>
 
-    <div class="row mt-4">
+    <hr>
+
+    <div class="row">
       <div class="col-md-6">
         <h2>Nova matéria</h2>
         <form id="add-materia-form">
@@ -79,6 +89,9 @@
           <button type="submit" class="btn btn-primary">Adição</button>
         </form>
       </div>
+
+      <hr>
+
       <div class="col-md-6">
         <h2>Atualizar</h2>
         <form id="update-materia-form">
@@ -107,10 +120,7 @@
       <button type="submit" class="btn btn-danger">削除</button>
     </form> -->
 
-    <hr>
-
   </div>
-  <!-- ... -->
 
   <!-- フッターは必要なし
   <footer class="footer">
@@ -120,7 +130,120 @@
     <a href="#"><img src="icons/note.png" alt=""></a>
   </footer>
  -->
+
+  
+  <script>
+    // APIエンドポイントのURL
+    const apiUrl = 'http://localhost:3000/materias';
+
+    // 学科リストを表示
+    function displayMaterias(materias) {
+      const materiaList = document.getElementById('materia-list');
+      materiaList.innerHTML = '';
+      materias.forEach(materia => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${materia.subject_id}</td>
+          <td>${materia.subject_name}</td>
+          <td>${materia.professor_id}</td>
+          <td>${materia.credit_hours}</td>
+          <td>
+            <button onclick="updateMateria(${materia.subject_id})">Atualizar</button>
+            <button onclick="deleteMateria(${materia.subject_id})">Excluir</button>
+          </td>
+        `;
+        materiaList.appendChild(row);
+      });
+    }
+
+    // 学科を取得
+    function getMaterias() {
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => displayMaterias(data));
+    }
+
+    // 新しい学科を追加
+    document.getElementById('add-materia-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const subject_name = document.getElementById('subject_name').value;
+      const professor_id = document.getElementById('professor_id').value;
+      const credit_hours = document.getElementById('credit_hours').value;
+
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          subject_name,
+          professor_id,
+          credit_hours
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          getMaterias();
+          document.getElementById('add-materia-form').reset();
+        });
+    });
+
+    // 学科を更新
+    function updateMateria(subject_id) {
+      // 学科IDを取得してフォームに設定
+      const updateForm = document.getElementById('update-materia-form');
+      updateForm.reset();
+      document.getElementById('update_subject_id').value = subject_id;
+
+      // 学科情報を取得してフォームに設定
+      const materia = materias.find(m => m.subject_id === subject_id);
+      if (materia) {
+        document.getElementById('update_subject_name').value = materia.subject_name;
+        document.getElementById('update_professor_id').value = materia.professor_id;
+        document.getElementById('update_credit_hours').value = materia.credit_hours;
+      }
+    }
+
+    // 学科を実際に更新
+    document.getElementById('update-materia-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const subject_id = document.getElementById('update_subject_id').value;
+      const subject_name = document.getElementById('update_subject_name').value;
+      const professor_id = document.getElementById('update_professor_id').value;
+      const credit_hours = document.getElementById('update_credit_hours').value;
+
+      fetch(`${apiUrl}/${subject_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          subject_name,
+          professor_id,
+          credit_hours
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          getMaterias();
+          document.getElementById('update-materia-form').reset();
+        });
+    });
+
+    // 学科を削除
+    function deleteMateria(subject_id) {
+      fetch(`${apiUrl}/${subject_id}`, {
+        method: 'DELETE'
+      })
+        .then(response => response.json())
+        .then(data => getMaterias());
+    }
+
+    // 初期データの読み込み
+    getMaterias();
+  </script>
   <script src="scripts/script.js"></script>
+  
 </body>
 
 </html>
