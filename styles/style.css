@@ -39,7 +39,6 @@ form input[type='navText'] {
   display: flex;
   width: 38%;
   padding-top: 3vh;
-  justify-content: space-around;
 }
 
 .nav-links li {
@@ -73,6 +72,45 @@ form input[type='navText'] {
 
 .nav-active {
   transform: translateX(0%) !important;
+}
+
+
+
+/*ここから  */
+body {
+  overflow-x: hidden;
+}
+
+.burger {
+  display: block;
+}
+
+.nav-links {
+  position: absolute;
+  left: 0;
+  height: 92vh;
+  top: 5vh;
+  background-color: #000000;
+  flex-direction: column;
+  align-items: left;
+  width: 15%;
+  transform: translateX(-100%);
+  transition: transform 0.5s ease-in;
+  padding-left: 2vh;
+}
+
+.nav-links li {
+  opacity: 0;
+}
+
+.nav-links form {
+  padding-top: 30px;
+  padding-bottom: 10px;
+}
+
+.nav-links2 {
+  display: none;
+  padding-left: 2vh;
 }
 
 @media screen and (max-width: 1024px) {
