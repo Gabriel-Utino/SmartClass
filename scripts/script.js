@@ -1,8 +1,10 @@
 const burger = document.querySelector('.burger')
 const nav = document.querySelector('.nav-links')
 const navLinks = document.querySelectorAll('.nav-links li')
-const alunoLink = document.querySelector('.nav-links li a[href="#"]')
-const navLinks2 = document.querySelector('.nav-links2')
+const alunoLink = document.querySelector('.nav-links li a[class="miniNavAluno"]')
+const cadastroLink = document.querySelector('.nav-links li a[class="miniNavCadastro"]')
+const navLinksAluno = document.querySelector('.nav-linksAluno')
+const navLinksCadastro = document.querySelector('.nav-linksCadastro')
 
 burger.addEventListener('click', () => {
   toggleNav()
@@ -10,7 +12,12 @@ burger.addEventListener('click', () => {
 
 alunoLink.addEventListener('click', event => {
   event.preventDefault()
-  toggleNav2()
+  toggleNavAluno()
+})
+
+cadastroLink.addEventListener('click', event => {
+  event.preventDefault()
+  toggleNavCadastro()
 })
 
 function toggleNav() {
@@ -20,18 +27,25 @@ function toggleNav() {
     if (link.style.animation) {
       link.style.animation = ''
     } else {
-      link.style.animation = `navLinksFade 0.5s ease forwards ${index / 7 + 0.4}s`
+      link.style.animation = `navLinksFade 0.5s ease forwards ${index / 20 + 0.8}s`
     }
   })
 
   burger.classList.toggle('toggle')
 }
 
-function toggleNav2() {
-  navLinks2.style.display = navLinks2.style.display === 'none' ? 'block' : 'none'
+function toggleNavAluno() {
+  navLinksAluno.style.display = navLinksAluno.style.display === 'none' ? 'block' : 'none'
 }
 
-// ここからサーバー関係
+function toggleNavCadastro() {
+  navLinksCadastro.style.display = navLinksCadastro.style.display === 'none' ? 'block' : 'none'
+}
+
+
+
+
+// ここからサーバー関係 ##################################################
 
 // ページ読み込み時に生徒リストを表示
 window.onload = function () {

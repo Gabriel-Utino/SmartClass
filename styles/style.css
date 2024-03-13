@@ -7,7 +7,8 @@
 }
 
 body {
-  background-color: #d6d6d6;;
+  background-color: #d6d6d6;
+  overflow-x: hidden;
 }
 
 nav {
@@ -46,6 +47,7 @@ form input[type='navText'] {
 }
 
 .nav-links li {
+  opacity: 0;
   list-style: none;
 }
 
@@ -55,13 +57,8 @@ form input[type='navText'] {
   font-weight: bold;
 }
 
-.nav-links img {
-  width: 30px;
-  height: auto;
-}
-
 .burger {
-  display: none;
+  display: block;
   cursor: pointer;
   margin: 10px auto 10px 10px;
 }
@@ -80,14 +77,7 @@ form input[type='navText'] {
 
 
 
-/*ここから  */
-body {
-  overflow-x: hidden;
-}
-
-.burger {
-  display: block;
-}
+/*ここからnav  */
 
 .nav-links {
   position: absolute;
@@ -103,16 +93,17 @@ body {
   padding-left: 2vh;
 }
 
-.nav-links li {
-  opacity: 0;
-}
-
 .nav-links form {
   padding-top: 30px;
   padding-bottom: 10px;
 }
 
-.nav-links2 {
+.nav-linksAluno {
+  display: none;
+  padding-left: 2vh;
+}
+
+.nav-linksCadastro {
   display: none;
   padding-left: 2vh;
 }
@@ -166,7 +157,12 @@ body {
     padding-bottom: 10px;
   }
 
-  .nav-links2 {
+  .nav-linksAluno {
+    display: none;
+    padding-left: 2vh;
+  }
+
+  .nav-linksCadastro {
     display: none;
     padding-left: 2vh;
   }
