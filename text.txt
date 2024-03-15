@@ -138,3 +138,50 @@ CREATE TABLE Professor (
     // 初期データの読み込み
     getMaterias();
   </script>
+
+###データベース　スクリプト
+-- Professorテーブルを作成
+CREATE TABLE Professor (
+    id_prof INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255),
+    email_consitucional VARCHAR(255),
+    materia_leci VARCHAR(255),
+    CPF VARCHAR(14),
+    telefone VARCHAR(20),
+    data_de_nascimento DATE,
+    email_pess VARCHAR(255),
+    endereco_completo TEXT
+);
+
+-- Disciplinaテーブルを作成
+CREATE TABLE Disciplina (
+    id_disciplina INT AUTO_INCREMENT PRIMARY KEY,
+    disciplina VARCHAR(255),
+    id_prof INT,
+    FOREIGN KEY (id_prof) REFERENCES Professor(id_prof)
+);
+
+
+
+
+-- Professorテーブルにレコードを追加
+INSERT INTO Professor (id_prof, nome, email_consitucional, materia_leci, CPF, telefone, data_de_nascimento, email_pess, endereco_completo) VALUES
+(1, 'John Doe', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
+(2, 'Jane Smith', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
+(3, 'Michael Johnson', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
+
+INSERT INTO Professor (id_prof, nome, email_consitucional, materia_leci, CPF, telefone, data_de_nascimento, email_pess, endereco_completo) VALUES (4, 'AAAAAAAAA', 'AAAAAAA@example.com', 'AAAAA', '999.999.999-99', '(456) 789-0123', '1990-12-15', 'AAAAAAAAAAAAl@example.com', '789 Oak St')
+
+-- Disciplinaテーブルにレコードを追加
+INSERT INTO Disciplina (id_disciplina, disciplina, id_prof) VALUES
+(1, 'Algebra', 1),
+(2, 'Quantum Mechanics', 2),
+(3, 'Organic Chemistry', 3);
+
+
+
+
+
+SELECT *
+FROM Professor
+JOIN Disciplina ON Professor.id_prof = Disciplina.id_prof;

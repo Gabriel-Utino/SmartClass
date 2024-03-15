@@ -45,8 +45,9 @@
     </div>
 
     <a href="index.html">
-      <div class="logoHome">
-        <img src="icons/smartclass.jpg" alt="">
+      <div class="logoHome"><!-- 
+        <img src="icons/smartclass.jpg" alt=""> -->
+        <p href="" style="color: white;">test</p>
       </div>
     </a>
 
@@ -66,8 +67,7 @@
         <tr>
           <th>MatériaID</th>
           <th>Nome da matéria</th>
-          <th>ProfessorID</th>
-          <th>Carga Horária</th>
+          <th>Nome do Professor</th>
           <th>Option</th>
         </tr>
       </thead>
@@ -101,16 +101,13 @@
         <h2>Atualizar</h2>
         <form id="update-materia-form">
           <div class="form-group">
-            <input type="number" class="form-control" id="update_subject_id" placeholder="MatériaID" required disabled>
+            <input type="number" class="form-control" id="update_id_disciplina" placeholder="ID_Disciplina" required disabled>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="update_subject_name" placeholder="Nome da matéria" required>
+            <input type="text" class="form-control" id="update_disciplina" placeholder="Nome da matéria" required>
           </div>
           <div class="form-group">
-            <input type="number" class="form-control" id="update_professor_id" placeholder="ProfessorID" required>
-          </div>
-          <div class="form-group">
-            <input type="number" class="form-control" id="update_credit_hours" placeholder="Carga Horária" required>
+            <input type="number" class="form-control" id="update_id_prof" placeholder="ProfessorID" required>
           </div>
           <button type="submit" class="btn btn-primary">Atualizar</button>
         </form>
@@ -130,22 +127,21 @@
   
   <script>
     // APIエンドポイントのURL
-    const apiUrl = 'http://localhost:3000/materias';
+    const apiUrl = 'http://localhost:3000/disciplinas';
 
     // 学科リストを表示
-    function displayMaterias(materias) {
+    function displayMaterias(disciplina) {
       const materiaList = document.getElementById('materia-list');
       materiaList.innerHTML = '';
-      materias.forEach(materia => {
+      disciplina.forEach(disciplina => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${materia.subject_id}</td>
-          <td>${materia.subject_name}</td>
-          <td>${materia.professor_id}</td>
-          <td>${materia.credit_hours}</td>
+          <td>${disciplina.id_disciplina}</td>
+          <td>${disciplina.disciplina}</td>
+          <td>${disciplina.id_prof}</td>
           <td>
-            <button onclick="updateMateria(${materia.subject_id})">Atualizar</button>
-            <button onclick="deleteMateria(${materia.subject_id})">Excluir</button>
+            <button onclick="updateMateria(${disciplina.id_disciplina})">Atualizar</button>
+            <button onclick="deleteMateria(${disciplina.id_disciplina})">Excluir</button>
           </td>
         `;
         materiaList.appendChild(row);
@@ -162,9 +158,8 @@
     // 新しい学科を追加
     document.getElementById('add-materia-form').addEventListener('submit', function (event) {
       event.preventDefault();
-      const subject_name = document.getElementById('subject_name').value;
-      const professor_id = document.getElementById('professor_id').value;
-      const credit_hours = document.getElementById('credit_hours').value;
+      const disciplina = document.getElementById('disciplina').value;
+      const id_prof = document.getElementById('id_prof').value;
 
       fetch(apiUrl, {
         method: 'POST',
@@ -172,9 +167,8 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          subject_name,
-          professor_id,
-          credit_hours
+          disciplina,
+          id_prof
         })
       })
         .then(response => response.json())
@@ -185,38 +179,35 @@
     });
 
     // 学科を更新
-    function updateMateria(subject_id) {
+    function updateMateria(id_disciplina) {
       // 学科IDを取得してフォームに設定
       const updateForm = document.getElementById('update-materia-form');
       updateForm.reset();
-      document.getElementById('update_subject_id').value = subject_id;
+      document.getElementById('update_id_disciplina').value = id_disciplina;
 
       // 学科情報を取得してフォームに設定
-      const materia = materias.find(m => m.subject_id === subject_id);
-      if (materia) {
-        document.getElementById('update_subject_name').value = materia.subject_name;
-        document.getElementById('update_professor_id').value = materia.professor_id;
-        document.getElementById('update_credit_hours').value = materia.credit_hours;
+      const disciplina = disciplina.find(m => m.id_disciplina === id_disciplina);
+      if (disciplina) {
+        document.getElementById('update_disciplina').value = disciplina.disciplina;
+        document.getElementById('update_id_prof').value = disciplina.id_prof;
       }
     }
 
     // 学科を実際に更新
     document.getElementById('update-materia-form').addEventListener('submit', function (event) {
       event.preventDefault();
-      const subject_id = document.getElementById('update_subject_id').value;
-      const subject_name = document.getElementById('update_subject_name').value;
-      const professor_id = document.getElementById('update_professor_id').value;
-      const credit_hours = document.getElementById('update_credit_hours').value;
+      const id_disciplina = document.getElementById('update_id_disciplina').value;
+      const disciplina = document.getElementById('update_disciplina').value;
+      const id_prof = document.getElementById('update_id_prof').value;
 
-      fetch(`${apiUrl}/${subject_id}`, {
+      fetch(`${apiUrl}/${id_disciplina}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          subject_name,
-          professor_id,
-          credit_hours
+          disciplina,
+          id_prof
         })
       })
         .then(response => response.json())
