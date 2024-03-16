@@ -24,8 +24,9 @@ connection.connect(err => {
   console.log('Connected to MySQL database')
 })
 
-// 商品の配列をMySQLから読み込む　ここからDisciplinaの文
+// 商品の配列をMySQLから読み込む
 let disciplinas = []
+let professores = []
 
 connection.query('SELECT d.id_disciplina, d.disciplina, p.nome as id_prof FROM disciplina d join professor p on d.id_prof = p.id_prof;', (err, results) => {
   if (err) {
@@ -52,6 +53,7 @@ app.get('/disciplinas/:id_disciplina', (req, res) => {
 })
 
 // 新しい商品を追加するためのルート
+// 先にProfessoresテーブルを投げる必要がある
 app.post('/disciplinas', (req, res) => {
   const newmateria = req.body
   connection.query(
@@ -123,8 +125,16 @@ app.delete('/disciplinas/:id_discpilina', (req, res) => {
 
 
 //ここからはProfessoresのバックエンド
+connection.query('SELECT * from professor;', (err, results) => {
+  if (err) {
+    console.error('Error fetching data from MySQL: ' + err)
+  } else {
+    professores = results
+  }
+})
+
 app.get("/professores", (req, res) => {
-  connection.query("SELECT * FROM Professores", (err, results) => {
+  connection.query("SELECT * FROM professor", (err, results) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar professores no banco de dados" });
     } else {
@@ -133,9 +143,10 @@ app.get("/professores", (req, res) => {
   });
 });
 
+// 引き抜き
 app.get("/professores/:id", (req, res) => {
   const id = req.params.id;
-  connection.query("SELECT * FROM Professores WHERE Id_prof = ?", [id], (err, results) => {
+  connection.query("SELECT * FROM Professor WHERE Id_prof = ?", [id], (err, results) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar o professor no banco de dados" });
     } else {
@@ -148,9 +159,11 @@ app.get("/professores/:id", (req, res) => {
   });
 });
 
+//追加
+/* 
 app.post("/professores", (req, res) => {
   const { Nome, Email_constitucional, Materia_Lecionada, CPF, Telefone, Data_Nascimento, Email_pessoal, Endereco_Completo } = req.body;
-  const insertQuery = "INSERT INTO Professores (Nome, Email_constitucional, Materia_Lecionada, CPF, Telefone, Data_Nascimento, Email_pessoal, Endereco_Completo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const insertQuery = "INSERT INTO Professor (Nome, Email_constitucional, Materia_Leci, CPF, Telefone, data_de_nascimento, Email_pess, Endereco_Completo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   connection.query(insertQuery, [Nome, Email_constitucional, Materia_Lecionada, CPF, Telefone, Data_Nascimento, Email_pessoal, Endereco_Completo], (err, result) => {
     if (err) {
       res.status(500).json({ message: "Erro ao adicionar um novo professor" });
@@ -158,8 +171,33 @@ app.post("/professores", (req, res) => {
       res.status(201).json({ id: result.insertId, ...req.body });
     }
   });
-});
+}); */
 
+app.post('/professores', (req, res) => {
+  const newProfessor = req.body
+  connection.query(
+    "INSERT INTO Professor (Nome, Email_constitucional, Materia_Leci, CPF, Telefone, data_de_nascimento, Email_pess, Endereco_Completo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    [newProfessor.Nome, newProfessor.Email_constitucional, newProfessor.Materia_Lecionada,
+      newProfessor.CPF, newProfessor.Telefone, newProfessor.Data_Nascimento,
+      newProfessor.Email_pessoal, newProfessor.Endereco_Completo],
+    (err, result) => {
+      if (err) {
+        console.error('Error adding data to MySQL: ' + err)
+        if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+          res.status(400).json({ message: '指定された教授が存在しません。' })
+        } else {
+          res.status(500).json({ message: '商品を追加できませんでした' })
+        }
+      } else {
+        newmateria.id_prof  = result.insertId
+        disciplinas.push(newmateria)
+        res.status(201).json(newmateria)
+      }
+    }
+  )
+})
+
+//更新
 app.put("/professores/:professor_id", (req, res) => {
   const professor_id = parseInt(req.params.professor_id);
   const updatedProfessor = req.body;

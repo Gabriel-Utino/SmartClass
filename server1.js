@@ -24,7 +24,7 @@ connection.connect((err) => {
 });
 
 app.get("/professores", (req, res) => {
-  connection.query("SELECT * FROM Professores", (err, results) => {
+  connection.query("SELECT * FROM Professor", (err, results) => {
     if (err) {
       res.status(500).json({ message: "Erro ao buscar professores no banco de dados" });
     } else {
@@ -50,7 +50,7 @@ app.get("/professores/:id", (req, res) => {
 
 app.post("/professores", (req, res) => {
   const { Nome, Email_constitucional, Materia_Lecionada, CPF, Telefone, Data_Nascimento, Email_pessoal, Endereco_Completo } = req.body;
-  const insertQuery = "INSERT INTO Professores (Nome, Email_constitucional, Materia_Lecionada, CPF, Telefone, Data_Nascimento, Email_pessoal, Endereco_Completo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const insertQuery = "INSERT INTO Professor (Nome, Email_constitucional, Materia_Leci, CPF, Telefone, data_de_nascimento, Email_pess, Endereco_Completo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   connection.query(insertQuery, [Nome, Email_constitucional, Materia_Lecionada, CPF, Telefone, Data_Nascimento, Email_pessoal, Endereco_Completo], (err, result) => {
     if (err) {
       res.status(500).json({ message: "Erro ao adicionar um novo professor" });
