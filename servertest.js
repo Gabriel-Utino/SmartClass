@@ -36,7 +36,7 @@ connection.query('SELECT d.id_disciplina, d.disciplina, p.nome as id_prof FROM d
   }
 })
 
-// すべての商品をリストするためのルート
+// すべての商品をリストするためのルート Disciplinas
 app.get('/disciplinas', (req, res) => {
   res.json(disciplinas)
 })
@@ -176,8 +176,8 @@ app.post("/professores", (req, res) => {
 app.post('/professores', (req, res) => {
   const newProfessor = req.body
   connection.query(
-    "INSERT INTO Professor (Nome, Email_constitucional, Materia_Leci, CPF, Telefone, data_de_nascimento, Email_pess, Endereco_Completo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-    [newProfessor.Nome, newProfessor.Email_constitucional, newProfessor.Materia_Lecionada,
+    "INSERT INTO Professor (nome, email_prof, Materia_Leci, CPF, Telefone, data_de_nascimento, Email_pass, Endereco_prof) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    [newProfessor.Nome, newProfessor.Email_prof, newProfessor.Materia_Lecionada,
       newProfessor.CPF, newProfessor.Telefone, newProfessor.Data_Nascimento,
       newProfessor.Email_pessoal, newProfessor.Endereco_Completo],
     (err, result) => {

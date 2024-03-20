@@ -117,10 +117,10 @@ CREATE TABLE Nota (
 
 ####中身のデータ、試験用に
 -- Professorテーブルにレコードを追加
-INSERT INTO Professor (id_prof, nome, email_consitucional, materia_leci, CPF, telefone, data_de_nascimento, email_pess, endereco_completo) VALUES
-(1, 'John Doe', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
-(2, 'Jane Smith', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
-(3, 'Michael Johnson', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
+INSERT INTO Professor (nome, email_prof, materia_leci, CPF, telefone, data_de_nascimento, email_pass, endereco_prof) VALUES
+('John Doe', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
+('Jane Smith', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
+('Michael Johnson', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
 
 INSERT INTO Professor (id_prof, nome, email_consitucional, materia_leci, CPF, telefone, data_de_nascimento, email_pess, endereco_completo) VALUES (4, 'AAAAAAAAA', 'AAAAAAA@example.com', 'AAAAA', '999.999.999-99', '(456) 789-0123', '1990-12-15', 'AAAAAAAAAAAAl@example.com', '789 Oak St')
 
