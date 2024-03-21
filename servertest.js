@@ -1,13 +1,11 @@
 const express = require('express')
 const cors = require('cors')
 const mysql = require('mysql')
-
+// 
 const app = express()
 const port = 3000
-
 app.use(express.json())
 app.use(cors())
-
 // MySQL接続設定
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -15,7 +13,6 @@ const connection = mysql.createConnection({
   password: '',
   database: 'smartclass'
 })
-
 connection.connect(err => {
   if (err) {
     console.error('MySQL connection failed: ' + err.stack)
@@ -25,8 +22,83 @@ connection.connect(err => {
 })
 
 // 商品の配列をMySQLから読み込む
+let turmas = []
 let disciplinas = []
 let professores = []
+
+
+// ここからはTurmaのサーバー管理に関わる部分 turma
+connection.query('SELECT * FROM turma;', (err, results) => {
+  if (err) {
+    console.error('Error fetching data from MySQL: ' + err)
+  } else {
+    turmas = results
+  }
+})
+// すべての商品をリストするためのルート turma
+app.get('/turmas', (req, res) => {
+  res.json(turmas)
+})
+// IDによって商品を取得するためのルート turma
+app.get('/turmas/:id_turma', (req, res) => {
+  const turmaID = parseInt(req.params.id_turma)
+  const turma = turmas.find((turma) => turma.id_turma === turmaID)
+  if (turma) {
+    res.json(turma)
+  } else {
+    res.status(404).json({ message: '見つかりません' })
+  }
+})
+// 新しい商品を追加するためのルート turma
+app.post('/turmas', (req, res) => {
+  const newTurmas = req.body
+  connection.query(
+    'INSERT INTO turma (nome_turma) VALUES (?)',
+    [newTurmas.nome_turma],
+    (err, result) => {
+      if (err) {
+        console.error('Error adding data to MySQL: ' + err)
+        if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+          res.status(400).json({ message: '存在しません。' })
+        } else {
+          res.status(500).json({ message: 'Turmaを追加できませんでした' })
+        }
+      } else {
+        newTurmas.id_turma = result.insertId
+        turmas.push(newTurmas)
+        res.status(201).json(newTurmas)
+      }
+    }
+  )
+})
+// 商品を更新するためのルート turma
+app.put("/turmas/:id_turma", (req, res) => {
+  const id_turma = parseInt(req.params.id_turma);
+  const updatedturma= req.body;
+  const index = turmas.findIndex((turma) => turma.id_turma === id_turma);
+  if (index !== -1) {
+
+    connection.query(
+      "UPDATE turma SET name_turma=? WHERE id_turma=?",
+      [updatedturma.name_turma, id_turma],
+      (err) => {
+        if (err) {
+          console.error("Error updating data in MySQL: " + err);
+          res.status(500).json({ message: "商品を更新できませんでした" });
+        } else {
+          turmas[index] = { ...turmas[index], ...updatedturma };
+          res.json(turmas[index]);
+        }
+      }
+    );
+
+  } else {
+    res.status(404).json({ message: "商品が見つかりません" });
+  }
+});
+
+
+
 
 connection.query('SELECT d.id_disciplina, d.disciplina, p.nome as id_prof FROM disciplina d join professor p on d.id_prof = p.id_prof;', (err, results) => {
   if (err) {
@@ -35,12 +107,10 @@ connection.query('SELECT d.id_disciplina, d.disciplina, p.nome as id_prof FROM d
     disciplinas = results
   }
 })
-
 // すべての商品をリストするためのルート Disciplinas
 app.get('/disciplinas', (req, res) => {
   res.json(disciplinas)
 })
-
 // IDによって商品を取得するためのルート
 app.get('/disciplinas/:id_disciplina', (req, res) => {
   const id_disciplina = parseInt(req.params.id_disciplina)
@@ -51,7 +121,6 @@ app.get('/disciplinas/:id_disciplina', (req, res) => {
     res.status(404).json({ message: '商品が見つかりません' })
   }
 })
-
 // 新しい商品を追加するためのルート
 // 先にProfessoresテーブルを投げる必要がある
 app.post('/disciplinas', (req, res) => {
@@ -75,7 +144,6 @@ app.post('/disciplinas', (req, res) => {
     }
   )
 })
-
 // 商品を更新するためのルート
 app.put('/disciplinas/:id_disciplina', (req, res) => {
   const id_disciplina = parseInt(req.params.id_disciplina)
@@ -99,7 +167,6 @@ app.put('/disciplinas/:id_disciplina', (req, res) => {
     res.status(404).json({ message: '商品が見つかりません' })
   }
 })
-
 // 商品を削除するためのルート
 app.delete('/disciplinas/:id_discpilina', (req, res) => {
   const id_disciplina = parseInt(req.params.id_discpilina)
@@ -132,7 +199,6 @@ connection.query('SELECT * from professor;', (err, results) => {
     professores = results
   }
 })
-
 app.get("/professores", (req, res) => {
   connection.query("SELECT * FROM professor", (err, results) => {
     if (err) {
@@ -142,7 +208,6 @@ app.get("/professores", (req, res) => {
     }
   });
 });
-
 // 引き抜き
 app.get("/professores/:id", (req, res) => {
   const id = req.params.id;
@@ -158,7 +223,6 @@ app.get("/professores/:id", (req, res) => {
     }
   });
 });
-
 //追加
 /* 
 app.post("/professores", (req, res) => {
@@ -172,7 +236,6 @@ app.post("/professores", (req, res) => {
     }
   });
 }); */
-
 app.post('/professores', (req, res) => {
   const newProfessor = req.body
   connection.query(
@@ -196,7 +259,6 @@ app.post('/professores', (req, res) => {
     }
   )
 })
-
 //更新
 app.put("/professores/:professor_id", (req, res) => {
   const professor_id = parseInt(req.params.professor_id);
@@ -237,7 +299,6 @@ app.put("/professores/:professor_id", (req, res) => {
     }
   );
 });
-
 app.delete("/professores/:id", (req, res) => {
   const id = req.params.id;
   const deleteQuery = "DELETE FROM Professores WHERE Id_prof = ?";
