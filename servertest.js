@@ -26,6 +26,7 @@ let turmas = []
 let alunos = []
 let disciplinas = []
 let professores = []
+let notas = []
 
 
 // ここからはTurmaのサーバー管理に関わる部分 turma
@@ -97,6 +98,24 @@ app.put("/turmas/:id_turma", (req, res) => {
     res.status(404).json({ message: "商品が見つかりません" });
   }
 });
+// 削除 turmas
+app.delete('/turmas/:id_turma', (req, res) => {
+  const id_turma = parseInt(req.params.id_discpilina)
+  const index = turmas.findIndex(turma => turma.id_turma === id_turma)
+  if (index !== -1) {
+    connection.query('DELETE FROM turma WHERE id_turma=?', [id_turma], err => {
+      if (err) {
+        console.error('Turma table - Error deleting data from MySQL: ' + err)
+        res.status(500).json({ message: '削除できませんでした' })
+      } else {
+        const removedTurma = turmas.splice(index, 1)
+        res.json(removedTurma[0])
+      }
+    })
+  } else {
+    res.status(404).json({ message: '見つかりませんでした' })
+  }
+})
 
 
 
@@ -169,6 +188,116 @@ app.put("/alunos/:id_aluno", (req, res) => {
     res.status(404).json({ message: "商品が見つかりません" });
   }
 });
+// 削除 alunos
+app.delete('/alunos/:id_aluno', (req, res) => {
+  const id_aluno = parseInt(req.params.id_discpilina)
+  const index = alunos.findIndex(aluno => aluno.id_aluno === id_aluno)
+  if (index !== -1) {
+    connection.query('DELETE FROM aluno WHERE id_aluno=?', [id_aluno], err => {
+      if (err) {
+        console.error('Aluno table - Error deleting data from MySQL: ' + err)
+        res.status(500).json({ message: '削除できませんでした' })
+      } else {
+        const removedAluno = alunos.splice(index, 1)
+        res.json(removedAluno[0])
+      }
+    })
+  } else {
+    res.status(404).json({ message: '見つかりませんでした' })
+  }
+})
+
+
+
+
+
+// ここからはProfessorのサーバー管理に関わる部分 Professor
+connection.query('SELECT * FROM professor;', (err, results) => {
+  if (err) {
+    console.error('Professorテーブルでエラー発生: ' + err)
+  } else {
+    professores = results
+  }
+})
+// リスト化 Professor
+app.get('/professores', (req, res) => {
+  res.json(professores)
+})
+// IDによって取得 Professor
+app.get('/professores/:id_prof', (req, res) => {
+  const professorID = parseInt(req.params.id_prof)
+  const professor = professores.find((professor) => professor.id_prof === professorID)
+  if (professor) {
+    res.json(professor)
+  } else {
+    res.status(404).json({ message: '見つかりませんでした' })
+  }
+})
+// 追加 Professor
+app.post('/professores', (req, res) => {
+  const newProfessor = req.body
+  connection.query(
+    "INSERT INTO professor (nome, email_prof, materia_leci, CPF, telefone, data_de_nascimento, email_pass, endereco_prof) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    [newProfessor.nome, newProfessor.email_prof, newProfessor.materia_leci , newProfessor.CPF , newProfessor.telefone , newProfessor.data_de_nascimento , newProfessor.email_pass, newProfessor.endereco_prof],
+    (err, result) => {
+      if (err) {
+        console.error('Error adding data to MySQL: ' + err)
+        if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+          res.status(400).json({ message: '存在しません。' })
+        } else {
+          res.status(500).json({ message: 'Professorを追加できませんでした' })
+        }
+      } else {
+        newProfessor.id_prof = result.insertId
+        professores.push(newProfessor)
+        res.status(201).json(newProfessor)
+      }
+    }
+  )
+})
+// 更新 Professor
+app.put("/professores/:id_prof", (req, res) => {
+  const id_prof = parseInt(req.params.id_prof);
+  const updatedProf = req.body;
+  const index = professores.findIndex((professor) => professor.id_prof === id_prof);
+  if (index !== -1) {
+    connection.query(
+      "UPDATE professor SET nome=?, email_prof=?, materia_leci=?, CPF=?, telefone=?, data_de_nascimento=?, email_pass=?, endereco_prof=? WHERE id_prof=?",
+      [updatedProf.nome, updatedProf.email_prof, updatedProf.materia_leci , updatedProf.CPF, updatedProf.telefone, updatedProf.data_de_nascimento, updatedProf.email_pass, updatedProf.endereco_prof, id_prof],
+      (err) => {
+        if (err) {
+          console.error("Table professor - Error updating data in MySQL: " + err);
+          res.status(500).json({ message: "更新できませんでした" });
+        } else {
+          professores[index] = { ...professores[index], ...updatedProf };
+          res.json(professores[index]);
+        }
+      }
+    );
+  } else {
+    res.status(404).json({ message: "商品が見つかりません" });
+  }
+});
+// 削除 Professor
+app.delete('/professores/:id_prof', (req, res) => {
+  const id_professor = parseInt(req.params.id_professor)
+  const index = professores.findIndex(materia => materia.id_professor === id_professor)
+  if (index !== -1) {
+    connection.query('DELETE FROM professor WHERE id_professor=?', [id_professor], err => {
+      if (err) {
+        console.error('Error deleting data from MySQL: ' + err)
+        res.status(500).json({ message: '商品を削除できませんでした' })
+      } else {
+        const removedProfessor = professores.splice(index, 1)
+        res.json(removedProfessor[0])
+      }
+    })
+  } else {
+    res.status(404).json({ message: '商品が見つかりません' })
+  }
+})
+
+
 
 
 
@@ -241,18 +370,106 @@ app.put('/disciplinas/:id_disciplina', (req, res) => {
     res.status(404).json({ message: '商品が見つかりません' })
   }
 })
-// 商品 disciplinas
+// 削除 disciplinas
 app.delete('/disciplinas/:id_discpilina', (req, res) => {
   const id_disciplina = parseInt(req.params.id_discpilina)
-  const index = disciplinas.findIndex(materia => materia.id_disciplina === id_disciplina)
+  const index = disciplinas.findIndex(disciplina => disciplina.id_disciplina === id_disciplina)
   if (index !== -1) {
     connection.query('DELETE FROM disciplina WHERE id_disciplina=?', [id_disciplina], err => {
+      if (err) {
+        console.error('Disciplina table - Error deleting data from MySQL: ' + err)
+        res.status(500).json({ message: '削除できませんでした' })
+      } else {
+        const removedDisciplina = disciplinas.splice(index, 1)
+        res.json(removedDisciplina[0])
+      }
+    })
+  } else {
+    res.status(404).json({ message: '見つかりませんでした' })
+  }
+})
+
+
+
+// ここからはProfessorのサーバー管理に関わる部分 Professor
+connection.query('SELECT * FROM professor;', (err, results) => {
+  if (err) {
+    console.error('Professorテーブルでエラー発生: ' + err)
+  } else {
+    professores = results
+  }
+})
+// リスト化 Professor
+app.get('/professores', (req, res) => {
+  res.json(professores)
+})
+// IDによって取得 Professor
+app.get('/professores/:id_prof', (req, res) => {
+  const professorID = parseInt(req.params.id_prof)
+  const professor = professores.find((professor) => professor.id_prof === professorID)
+  if (professor) {
+    res.json(professor)
+  } else {
+    res.status(404).json({ message: '見つかりませんでした' })
+  }
+})
+// 追加 Professor
+app.post('/professores', (req, res) => {
+  const newProfessor = req.body
+  connection.query(
+    "INSERT INTO professor (nome, email_prof, materia_leci, CPF, telefone, data_de_nascimento, email_pass, endereco_prof) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    [newProfessor.nome, newProfessor.email_prof, newProfessor.materia_leci , newProfessor.CPF , newProfessor.telefone , newProfessor.data_de_nascimento , newProfessor.email_pass, newProfessor.endereco_prof],
+    (err, result) => {
+      if (err) {
+        console.error('Error adding data to MySQL: ' + err)
+        if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+          res.status(400).json({ message: '存在しません。' })
+        } else {
+          res.status(500).json({ message: 'Professorを追加できませんでした' })
+        }
+      } else {
+        newProfessor.id_prof = result.insertId
+        professores.push(newProfessor)
+        res.status(201).json(newProfessor)
+      }
+    }
+  )
+})
+// 更新 Professor
+app.put("/professores/:id_prof", (req, res) => {
+  const id_prof = parseInt(req.params.id_prof);
+  const updatedProf = req.body;
+  const index = professores.findIndex((professor) => professor.id_prof === id_prof);
+  if (index !== -1) {
+    connection.query(
+      "UPDATE professor SET nome=?, email_prof=?, materia_leci=?, CPF=?, telefone=?, data_de_nascimento=?, email_pass=?, endereco_prof=? WHERE id_prof=?",
+      [updatedProf.nome, updatedProf.email_prof, updatedProf.materia_leci , updatedProf.CPF, updatedProf.telefone, updatedProf.data_de_nascimento, updatedProf.email_pass, updatedProf.endereco_prof, id_prof],
+      (err) => {
+        if (err) {
+          console.error("Table professor - Error updating data in MySQL: " + err);
+          res.status(500).json({ message: "更新できませんでした" });
+        } else {
+          professores[index] = { ...professores[index], ...updatedProf };
+          res.json(professores[index]);
+        }
+      }
+    );
+  } else {
+    res.status(404).json({ message: "商品が見つかりません" });
+  }
+});
+// 削除 Professor
+app.delete('/professores/:id_prof', (req, res) => {
+  const id_professor = parseInt(req.params.id_professor)
+  const index = professores.findIndex(materia => materia.id_professor === id_professor)
+  if (index !== -1) {
+    connection.query('DELETE FROM professor WHERE id_professor=?', [id_professor], err => {
       if (err) {
         console.error('Error deleting data from MySQL: ' + err)
         res.status(500).json({ message: '商品を削除できませんでした' })
       } else {
-        const removedmateria = disciplinas.splice(index, 1)
-        res.json(removedmateria[0])
+        const removedProfessor = professores.splice(index, 1)
+        res.json(removedProfessor[0])
       }
     })
   } else {
@@ -264,66 +481,67 @@ app.delete('/disciplinas/:id_discpilina', (req, res) => {
 
 
 
-// ここからはProfessorのサーバー管理に関わる部分 Professor
-connection.query('SELECT * FROM professor;', (err, results) => {
+// ここからはNotasのサーバー管理に関わる部分 Nota
+connection.query('SELECT * FROM nota;', (err, results) => {
   if (err) {
-    console.error('Professorテーブルでエラー発生: ' + err)
+    console.error('Notaテーブルでエラー発生: ' + err)
   } else {
-    professores = results
+    notas = results
   }
 })
-// リスト化 Professor
-app.get('/professores', (req, res) => {
-  res.json(professores)
+// リスト化 Nota
+app.get('/notas', (req, res) => {
+  res.json(notas)
 })
-// IDによって取得 Professor
-app.get('/professores/:id_prof', (req, res) => {
-  const professorID = parseInt(req.params.id_prof)
-  const professor = professores.find((professor) => professor.id_prof === professorID)
-  if (professor) {
-    res.json(professor)
+// IDによって取得 Nota
+app.get('/notas/:id_aluno/:id_disciplina', (req, res) => {
+  const notaAlunoID = parseInt(req.params.id_aluno)
+  const notaDisciplinaID = parseInt(req.params.id_disciplina)
+  const nota = notas.find((nota) => (nota.id_aluno === notaAlunoID) & (nota.id_disciplina === notaDisciplinaID))
+  if (nota) {
+    res.json(nota)
   } else {
     res.status(404).json({ message: '見つかりませんでした' })
   }
 })
-// 追加 Professor
-app.post('/professores', (req, res) => {
-  const newProfessor = req.body
+// 追加 Nota
+app.post('/notas', (req, res) => {
+  const newNota = req.body
   connection.query(
-    "INSERT INTO professor (nome, email_prof, materia_leci, CPF, telefone, data_de_nascimento, email_pass, endereco_prof) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-    [newProfessor.nome, newProfessor.email_prof, newProfessor.materia_leci , newProfessor.CPF , newProfessor.telefone , newProfessor.data_de_nascimento , newProfessor.email_pass, newProfessor.endereco_prof],
+    "INSERT INTO nota (id_aluno, id_disciplina, n1, AI, AP, faltas) VALUES (?, ?, ?, ?, ?, ?)",
+    [newNota.id_aluno, newNota.id_disciplina, newNota.n1 , newNota.AI , newNota.AP , newNota.faltas],
     (err, result) => {
       if (err) {
-        console.error('Error adding data to MySQL: ' + err)
+        console.error('Nota table - Error adding data to MySQL: ' + err)
         if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-          res.status(400).json({ message: '存在しません。' })
+          res.status(400).json({ message: 'Notaの値が存在しません。' })
         } else {
-          res.status(500).json({ message: 'Professorを追加できませんでした' })
+          res.status(500).json({ message: 'notaを追加できませんでした' })
         }
       } else {
-        newProfessor.id_prof = result.insertId
-        professores.push(newProfessor)
-        res.status(201).json(newProfessor)
+        newNota.id_nota = result.insertId
+        notas.push(newNota)
+        res.status(201).json(newNota)
       }
     }
   )
 })
 // 更新 Professor
-app.put("/professores/:id_prof", (req, res) => {
-  const id_prof = parseInt(req.params.id_prof);
-  const updatedProf = req.body;
-  const index = professores.findIndex((professor) => professor.id_prof === id_prof);
+app.put("/notas/:id_nota", (req, res) => {
+  const id_nota = parseInt(req.params.id_nota);
+  const updatedNota = req.body;
+  const index = notas.findIndex((nota) => nota.id_nota === id_nota);
   if (index !== -1) {
     connection.query(
-      "UPDATE professor SET nome=?, email_prof=?, materia_leci=?, CPF=?, telefone=?, data_de_nascimento=?, email_pass=?, endereco_prof=? WHERE id_prof=?",
-      [updatedProf.nome, updatedProf.email_prof, updatedProf.materia_leci , updatedProf.CPF, updatedProf.telefone, updatedProf.data_de_nascimento, updatedProf.email_pass, updatedProf.endereco_prof, id_prof],
+      "UPDATE nota SET nome=?, email_prof=?, materia_leci=?, CPF=?, telefone=?, data_de_nascimento=?, email_pass=?, endereco_prof=? WHERE id_nota=?",
+      [updatedNota.nome, updatedNota.email_prof, updatedNota.materia_leci , updatedNota.CPF, updatedNota.telefone, updatedNota.data_de_nascimento, updatedNota.email_pass, updatedNota.endereco_prof, id_nota],
       (err) => {
         if (err) {
-          console.error("Table professor - Error updating data in MySQL: " + err);
+          console.error("Table nota - Error updating data in MySQL: " + err);
           res.status(500).json({ message: "更新できませんでした" });
         } else {
-          professores[index] = { ...professores[index], ...updatedProf };
-          res.json(professores[index]);
+          notas[index] = { ...notas[index], ...updatedNota };
+          res.json(notas[index]);
         }
       }
     );
@@ -331,78 +549,26 @@ app.put("/professores/:id_prof", (req, res) => {
     res.status(404).json({ message: "商品が見つかりません" });
   }
 });
-
-
-
-
-
-// ここからはProfessorのサーバー管理に関わる部分 Professor
-connection.query('SELECT * FROM professor;', (err, results) => {
-  if (err) {
-    console.error('Professorテーブルでエラー発生: ' + err)
-  } else {
-    professores = results
-  }
-})
-// リスト化 Professor
-app.get('/professores', (req, res) => {
-  res.json(professores)
-})
-// IDによって取得 Professor
-app.get('/professores/:id_prof', (req, res) => {
-  const professorID = parseInt(req.params.id_prof)
-  const professor = professores.find((professor) => professor.id_prof === professorID)
-  if (professor) {
-    res.json(professor)
+// 削除 nota
+app.delete('/notas/:id_nota', (req, res) => {
+  const id_nota = parseInt(req.params.id_nota)
+  const index = notas.findIndex(materia => materia.id_nota === id_nota)
+  if (index !== -1) {
+    connection.query('DELETE FROM nota WHERE id_nota=?', [id_nota], err => {
+      if (err) {
+        console.error('Error deleting data from MySQL: ' + err)
+        res.status(500).json({ message: '削除できませんでした' })
+      } else {
+        const removedNota = notas.splice(index, 1)
+        res.json(removedNota[0])
+      }
+    })
   } else {
     res.status(404).json({ message: '見つかりませんでした' })
   }
 })
-// 追加 Professor
-app.post('/professores', (req, res) => {
-  const newProfessor = req.body
-  connection.query(
-    "INSERT INTO professor (nome, email_prof, materia_leci, CPF, telefone, data_de_nascimento, email_pass, endereco_prof) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-    [newProfessor.nome, newProfessor.email_prof, newProfessor.materia_leci , newProfessor.CPF , newProfessor.telefone , newProfessor.data_de_nascimento , newProfessor.email_pass, newProfessor.endereco_prof],
-    (err, result) => {
-      if (err) {
-        console.error('Error adding data to MySQL: ' + err)
-        if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-          res.status(400).json({ message: '存在しません。' })
-        } else {
-          res.status(500).json({ message: 'Professorを追加できませんでした' })
-        }
-      } else {
-        newProfessor.id_prof = result.insertId
-        professores.push(newProfessor)
-        res.status(201).json(newProfessor)
-      }
-    }
-  )
-})
-// 更新 Professor
-app.put("/professores/:id_prof", (req, res) => {
-  const id_prof = parseInt(req.params.id_prof);
-  const updatedProf = req.body;
-  const index = professores.findIndex((professor) => professor.id_prof === id_prof);
-  if (index !== -1) {
-    connection.query(
-      "UPDATE professor SET nome=?, email_prof=?, materia_leci=?, CPF=?, telefone=?, data_de_nascimento=?, email_pass=?, endereco_prof=? WHERE id_prof=?",
-      [updatedProf.nome, updatedProf.email_prof, updatedProf.materia_leci , updatedProf.CPF, updatedProf.telefone, updatedProf.data_de_nascimento, updatedProf.email_pass, updatedProf.endereco_prof, id_prof],
-      (err) => {
-        if (err) {
-          console.error("Table professor - Error updating data in MySQL: " + err);
-          res.status(500).json({ message: "更新できませんでした" });
-        } else {
-          professores[index] = { ...professores[index], ...updatedProf };
-          res.json(professores[index]);
-        }
-      }
-    );
-  } else {
-    res.status(404).json({ message: "商品が見つかりません" });
-  }
-});
+
+
 
 
 
