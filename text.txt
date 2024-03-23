@@ -125,10 +125,10 @@ INSERT INTO Professor (nome, email_prof, materia_leci, CPF, telefone, data_de_na
 INSERT INTO Professor (id_prof, nome, email_consitucional, materia_leci, CPF, telefone, data_de_nascimento, email_pess, endereco_completo) VALUES (4, 'AAAAAAAAA', 'AAAAAAA@example.com', 'AAAAA', '999.999.999-99', '(456) 789-0123', '1990-12-15', 'AAAAAAAAAAAAl@example.com', '789 Oak St')
 
 -- Disciplinaテーブルにレコードを追加
-INSERT INTO Disciplina (id_disciplina, disciplina, id_prof) VALUES
-(1, 'Algebra', 1),
-(2, 'Quantum Mechanics', 2),
-(3, 'Organic Chemistry', 3);
+INSERT INTO Disciplina (disciplina, id_prof) VALUES
+('Algebra', 1),
+('Quantum Mechanics', 2),
+('Organic Chemistry', 3);
 
 -- Notaテーブルにレコードを追加
 INSERT INTO Nota (id_aluno, id_disciplina, n1, AI, AP, faltas) VALUES
@@ -137,8 +137,52 @@ INSERT INTO Nota (id_aluno, id_disciplina, n1, AI, AP, faltas) VALUES
     (2, 1, 9.0, 7.5, 8.5, 3),
     (2, 2, 8.0, 9.0, 7.5, 0);
 
+-- Responsavelテーブルにレコードを追加
+INSERT INTO Responsavel (nome_pesp, endereco_pesp, telefone_pesp, email_pesp) 
+VALUES 
+('John Doe', '123 Main Street, City, Country', '+1234567890', 'john@example.com'),
+('Jane Smith', '456 Elm Street, City, Country', '+1987654321', 'jane@example.com'),
+('Michael Johnson', '789 Oak Street, City, Country', '+1122334455', 'michael@example.com');
+
+
 
 
 SELECT *
 FROM Professor
 JOIN Disciplina ON Professor.id_prof = Disciplina.id_prof;
+
+
+
+
+
+
+
+
+
+app.delete('/disciplinas/:id_disciplina', (req, res) => {
+  const id_disciplina = parseInt(req.params.id_disciplina);
+  const index = disciplinas.findIndex(disciplina => disciplina.id_disciplina === id_disciplina);
+  
+  if (index !== -1) {
+    // 先に関連するデータを削除する
+    connection.query('DELETE FROM nota WHERE id_disciplina=?', [id_disciplina], err => {
+      if (err) {
+        console.error('Error deleting related data from MySQL: ' + err);
+        res.status(500).json({ message: '削除できませんでした' });
+      } else {
+        // 関連するデータが削除されたら、Disciplinaを削除する
+        connection.query('DELETE FROM disciplina WHERE id_disciplina=?', [id_disciplina], err => {
+          if (err) {
+            console.error('Disciplina table - Error deleting data from MySQL: ' + err);
+            res.status(500).json({ message: '削除できませんでした' });
+          } else {
+            const removedDisciplina = disciplinas.splice(index, 1);
+            res.json(removedDisciplina[0]);
+          }
+        });
+      }
+    });
+  } else {
+    res.status(404).json({ message: '見つかりませんでした' });
+  }
+});
