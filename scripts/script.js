@@ -46,7 +46,7 @@ function toggleNavCadastro() {
 
 
 // ここからサーバー関係 ##################################################
-
+/* 
 // ページ読み込み時に生徒リストを表示
 window.onload = function () {
   getAlunos()
@@ -182,3 +182,4 @@ function deleteAluno(id) {
       console.error('Error:', error)
     })
 }
+ */

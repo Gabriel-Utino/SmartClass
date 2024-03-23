@@ -142,8 +142,13 @@ INSERT INTO Responsavel (nome_pesp, endereco_pesp, telefone_pesp, email_pesp)
 VALUES 
 ('John Doe', '123 Main Street, City, Country', '+1234567890', 'john@example.com'),
 ('Jane Smith', '456 Elm Street, City, Country', '+1987654321', 'jane@example.com'),
-('Michael Johnson', '789 Oak Street, City, Country', '+1122334455', 'michael@example.com');
-
+('Michael Johnson', '789 Oak Street, City, Country', '+1122334455', 'michael@example.com'),
+('AAAAAAA', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
+('BBBBBBBB', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
+('CCCCCCCC', 'michaDDDDDel@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St'),
+('DDDDD', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
+('EEEEEEEE', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
+('FFFFFF', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
 
 
 

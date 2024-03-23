@@ -277,3 +277,16 @@ hr {
 .container button:hover {
   background-color: black;
 }
+
+.containerTable {
+  max-height: 500px; /* スクロール可能な最大高さ */
+  overflow-y: auto; /* 縦方向のスクロールを有効にする */
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th, .table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
