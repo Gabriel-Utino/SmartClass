@@ -28,129 +28,29 @@ CREATE TABLE Professor (
 
 
 
-  <script>
-    // APIエンドポイントのURL
-    const apiUrl = 'http://localhost:3000/materias';
-
-    // 学科リストを表示
-    function displayMaterias(materias) {
-      const materiaList = document.getElementById('materia-list');
-      materiaList.innerHTML = '';
-      materias.forEach(materia => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${materia.subject_id}</td>
-          <td>${materia.subject_name}</td>
-          <td>${materia.professor_id}</td>
-          <td>${materia.credit_hours}</td>
-          <td>
-            <button onclick="updateMateria(${materia.subject_id})">Atualizar</button>
-            <button onclick="deleteMateria(${materia.subject_id})">Excluir</button>
-          </td>
-        `;
-        materiaList.appendChild(row);
-      });
-    }
-
-    // 学科を取得
-    function getMaterias() {
-      fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => displayMaterias(data));
-    }
-
-    // 新しい学科を追加
-    document.getElementById('add-materia-form').addEventListener('submit', function (event) {
-      event.preventDefault();
-      const subject_name = document.getElementById('subject_name').value;
-      const professor_id = document.getElementById('professor_id').value;
-      const credit_hours = document.getElementById('credit_hours').value;
-
-      fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          subject_name,
-          professor_id,
-          credit_hours
-        })
-      })
-        .then(response => response.json())
-        .then(data => {
-          getMaterias();
-          document.getElementById('add-materia-form').reset();
-        });
-    });
-
-    // 学科を更新
-    function updateMateria(subject_id) {
-      // 学科IDを取得してフォームに設定
-      const updateForm = document.getElementById('update-materia-form');
-      updateForm.reset();
-      document.getElementById('update_subject_id').value = subject_id;
-
-      // 学科情報を取得してフォームに設定
-      const materia = materias.find(m => m.subject_id === subject_id);
-      if (materia) {
-        document.getElementById('update_subject_name').value = materia.subject_name;
-        document.getElementById('update_professor_id').value = materia.professor_id;
-        document.getElementById('update_credit_hours').value = materia.credit_hours;
-      }
-    }
-
-    // 学科を実際に更新
-    document.getElementById('update-materia-form').addEventListener('submit', function (event) {
-      event.preventDefault();
-      const subject_id = document.getElementById('update_subject_id').value;
-      const subject_name = document.getElementById('update_subject_name').value;
-      const professor_id = document.getElementById('update_professor_id').value;
-      const credit_hours = document.getElementById('update_credit_hours').value;
-
-      fetch(`${apiUrl}/${subject_id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          subject_name,
-          professor_id,
-          credit_hours
-        })
-      })
-        .then(response => response.json())
-        .then(data => {
-          getMaterias();
-          document.getElementById('update-materia-form').reset();
-        });
-    });
-
-    // 学科を削除
-    function deleteMateria(subject_id) {
-      fetch(`${apiUrl}/${subject_id}`, {
-        method: 'DELETE'
-      })
-        .then(response => response.json())
-        .then(data => getMaterias());
-    }
-
-    // 初期データの読み込み
-    getMaterias();
-  </script>
 
 ###データベース　スクリプト
+-- escolaはいらないかも？
+-- Escolaテーブルを作成
+CREATE TABLE Escola (
+    id_escola INT AUTO_INCREMENT PRIMARY KEY,
+    nome_escola VARCHAR(255),
+    email_escola VARCHAR(255),
+    senha_escola VARCHAR(255)
+);
+
+
 -- Professorテーブルを作成
 CREATE TABLE Professor (
     id_prof INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255),
-    email_consitucional VARCHAR(255),
+    email_prof VARCHAR(255),
     materia_leci VARCHAR(255),
     CPF VARCHAR(14),
     telefone VARCHAR(20),
     data_de_nascimento DATE,
-    email_pess VARCHAR(255),
-    endereco_completo TEXT
+    email_pass VARCHAR(255),
+    endereco_prof TEXT
 );
 
 -- Disciplinaテーブルを作成
@@ -161,27 +61,133 @@ CREATE TABLE Disciplina (
     FOREIGN KEY (id_prof) REFERENCES Professor(id_prof)
 );
 
+-- Turmaテーブルを作成
+CREATE TABLE Turma (
+    id_turma INT AUTO_INCREMENT PRIMARY KEY,
+    nome_turma VARCHAR(255)
+);
+
+-- Responsavelテーブルを作成
+CREATE TABLE Responsavel (
+    id_resp INT AUTO_INCREMENT PRIMARY KEY,
+    nome_pesp VARCHAR(255),
+    endereco_pesp VARCHAR(255),
+    telefone_pesp VARCHAR(20),
+    email_pesp VARCHAR(255)
+);
+
+-- Alunoテーブルを作成
+CREATE TABLE Aluno (
+    id_aluno INT AUTO_INCREMENT PRIMARY KEY,
+    nome_aluno  VARCHAR(255),
+    ra_aluno  VARCHAR(255), 
+    endereco_aluno  VARCHAR(255),
+    telefone_aluno  VARCHAR(255),
+    email_aluno  VARCHAR(255),
+    id_turma INT,
+    FOREIGN KEY (id_turma) REFERENCES Turma(id_turma),
+    nacimento_aluno VARCHAR(255)
+);
+
+-- AlunoとResponsavelの多対多の関係を持つための関連テーブル
+CREATE TABLE Aluno_Responsavel (
+    id_aluno INT,
+    id_resp INT,
+    FOREIGN KEY (id_aluno) REFERENCES Aluno(id_aluno),
+    FOREIGN KEY (id_resp) REFERENCES Responsavel(id_resp),
+    PRIMARY KEY (id_aluno, id_resp)
+);
+
+-- AlunoとDisciplinaの多対多の関係を持つための関連テーブル + 成績等の管理
+CREATE TABLE Nota (
+    id_nota INT AUTO_INCREMENT PRIMARY KEY,
+    id_aluno INT,
+    id_disciplina INT,
+    FOREIGN KEY (id_aluno) REFERENCES aluno(id_aluno),
+    FOREIGN KEY (id_disciplina) REFERENCES Disciplina(id_disciplina),
+    n1 REAL,
+    AI REAL,
+    AP REAL,
+    faltas INT
+);
 
 
 
+
+
+####中身のデータ、試験用に
 -- Professorテーブルにレコードを追加
-INSERT INTO Professor (id_prof, nome, email_consitucional, materia_leci, CPF, telefone, data_de_nascimento, email_pess, endereco_completo) VALUES
-(1, 'John Doe', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
-(2, 'Jane Smith', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
-(3, 'Michael Johnson', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
+INSERT INTO Professor (nome, email_prof, materia_leci, CPF, telefone, data_de_nascimento, email_pass, endereco_prof) VALUES
+('John Doe', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
+('Jane Smith', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
+('Michael Johnson', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
 
 INSERT INTO Professor (id_prof, nome, email_consitucional, materia_leci, CPF, telefone, data_de_nascimento, email_pess, endereco_completo) VALUES (4, 'AAAAAAAAA', 'AAAAAAA@example.com', 'AAAAA', '999.999.999-99', '(456) 789-0123', '1990-12-15', 'AAAAAAAAAAAAl@example.com', '789 Oak St')
 
 -- Disciplinaテーブルにレコードを追加
-INSERT INTO Disciplina (id_disciplina, disciplina, id_prof) VALUES
-(1, 'Algebra', 1),
-(2, 'Quantum Mechanics', 2),
-(3, 'Organic Chemistry', 3);
+INSERT INTO Disciplina (disciplina, id_prof) VALUES
+('Algebra', 1),
+('Quantum Mechanics', 2),
+('Organic Chemistry', 3);
 
+-- Notaテーブルにレコードを追加
+INSERT INTO Nota (id_aluno, id_disciplina, n1, AI, AP, faltas) VALUES
+    (1, 1, 8.5, 9.0, 8.0, 2),
+    (1, 2, 7.0, 8.5, 9.0, 1),
+    (2, 1, 9.0, 7.5, 8.5, 3),
+    (2, 2, 8.0, 9.0, 7.5, 0);
 
+-- Responsavelテーブルにレコードを追加
+INSERT INTO Responsavel (nome_pesp, endereco_pesp, telefone_pesp, email_pesp) 
+VALUES 
+('John Doe', '123 Main Street, City, Country', '+1234567890', 'john@example.com'),
+('Jane Smith', '456 Elm Street, City, Country', '+1987654321', 'jane@example.com'),
+('Michael Johnson', '789 Oak Street, City, Country', '+1122334455', 'michael@example.com'),
+('AAAAAAA', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
+('BBBBBBBB', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
+('CCCCCCCC', 'michaDDDDDel@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St'),
+('DDDDD', 'john@example.com', 'Mathematics', '123.456.789-01', '(123) 456-7890', '1980-01-01', 'john_personal@example.com', '123 Main St'),
+('EEEEEEEE', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
+('FFFFFF', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
 
 
 
 SELECT *
 FROM Professor
 JOIN Disciplina ON Professor.id_prof = Disciplina.id_prof;
+
+
+
+
+
+
+
+
+
+app.delete('/disciplinas/:id_disciplina', (req, res) => {
+  const id_disciplina = parseInt(req.params.id_disciplina);
+  const index = disciplinas.findIndex(disciplina => disciplina.id_disciplina === id_disciplina);
+  
+  if (index !== -1) {
+    // 先に関連するデータを削除する
+    connection.query('DELETE FROM nota WHERE id_disciplina=?', [id_disciplina], err => {
+      if (err) {
+        console.error('Error deleting related data from MySQL: ' + err);
+        res.status(500).json({ message: '削除できませんでした' });
+      } else {
+        // 関連するデータが削除されたら、Disciplinaを削除する
+        connection.query('DELETE FROM disciplina WHERE id_disciplina=?', [id_disciplina], err => {
+          if (err) {
+            console.error('Disciplina table - Error deleting data from MySQL: ' + err);
+            res.status(500).json({ message: '削除できませんでした' });
+          } else {
+            const removedDisciplina = disciplinas.splice(index, 1);
+            res.json(removedDisciplina[0]);
+          }
+        });
+      }
+    });
+  } else {
+    res.status(404).json({ message: '見つかりませんでした' });
+  }
+});

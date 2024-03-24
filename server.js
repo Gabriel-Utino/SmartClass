@@ -118,3 +118,35 @@ app.delete("/materias/:subject_id", (req, res) => {
 app.listen(port, () => {
   console.log(`ポート${port}でサーバーが開始されました`);
 });
+
+
+
+
+
+
+
+
+
+
+
+app.delete('/disciplinas/:id_disciplina', (req, res) => {
+  const id_disciplina = parseInt(req.params.id_disciplina);
+
+  // 先にNotaテーブルから関連するレコードを削除
+  connection.query('DELETE FROM Nota WHERE id_disciplina = ?', [id_disciplina], (err, result) => {
+    if (err) {
+      console.error('Error deleting data from Nota table: ' + err);
+      res.status(500).json({ message: '削除できませんでした' });
+    } else {
+      // Disciplinaテーブルからのレコード削除
+      connection.query('DELETE FROM Disciplina WHERE id_disciplina = ?', [id_disciplina], (err, result) => {
+        if (err) {
+          console.error('Error deleting data from Disciplina table: ' + err);
+          res.status(500).json({ message: '削除できませんでした' });
+        } else {
+          res.status(200).json({ message: '削除しました' });
+        }
+      });
+    }
+  });
+});
