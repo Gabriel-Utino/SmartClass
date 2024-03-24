@@ -1,0 +1,5 @@
+/* ナビゲーションバーの高さに合わせた余白 */
+body {
+    padding-top: 70px; /* デフォルトのナビゲーションバーの高さは56px */
+    background-color: #d6d6d6;
+}
