@@ -385,6 +385,7 @@ app.delete('/disciplinas/:id_discpilina', (req, res) => {
 
 
 
+
 // ここからはResponsavelのサーバー管理に関わる部分 Responsavel
 connection.query('SELECT * FROM responsavel;', (err, results) => {
   if (err) {
