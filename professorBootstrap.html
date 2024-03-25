@@ -11,7 +11,7 @@
   <!-- <link rel="stylesheet" href="styles/style.css" /> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles/bootstrap.css">
+  <link rel="stylesheet" href="styles/bootstrap.css">
 </head>
 
 <body>
@@ -83,18 +83,18 @@
           </ul>
         </div>
       </div>
-      <img src="icons/smartclass.png"  width="50" height="50" class="mx-auto d-block" alt="smartclassIcon">
+      <img src="icons/smartclass.png" width="50" height="50" class="mx-auto d-block" alt="smartclassIcon">
     </div>
   </nav>
 
 
 
   <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
-  
+
   <div class="container">
     <h1>Cadastro de matérias</h1>
 
-    <div class="containerTable">
+    <div class="containerTable" style="overflow-y: auto; max-height: 400px;">
       <table class="table">
         <thead>
           <tr>
@@ -110,7 +110,7 @@
             <th>Option</th>
           </tr>
         </thead>
-        <tbody id="professoresList">
+        <tbody id="professoresList" class="overflow-auto">
           <!-- データはここに挿入されます -->
         </tbody>
       </table>
@@ -156,7 +156,8 @@
         <h2>Editar</h2>
         <form id="updateProfessorForm">
           <div class="form-group">
-            <input type="number" class="form-control" id="update_id_disciplina" placeholder="ID_Disciplina" required disabled>
+            <input type="number" class="form-control" id="update_id_disciplina" placeholder="ID_Disciplina" required
+              disabled>
           </div>
           <div class="form-group">
             <input type="text" class="form-control" id="update_disciplina" placeholder="Nome da matéria" required>
@@ -169,9 +170,9 @@
       </div>
     </div>
 
-  <!-- ... -->
+    <!-- ... -->
 
-  <!-- 必要ないと判断
+    <!-- 必要ないと判断
   <footer class="footer">
     <a href="home.html"><img src="icons/home.png" alt=""></a>
     <a href="#"><img src="icons/calendar.png" alt=""></a>
@@ -179,16 +180,16 @@
     <a href="#"><img src="icons/note.png" alt=""></a>
   </footer>
   -->
-  <script>
-    const apiUrl = 'http://localhost:3000/professores';
+    <script>
+      const apiUrl = 'http://localhost:3000/professores';
 
-    // リストを表示
-    function displayProfessores(professor) {
-      const professoresList = document.getElementById('professoresList');
-      professoresList.innerHTML = '';
-      professor.forEach(professor => {
-        const professorElement = document.createElement('tr');
-        professorElement.innerHTML = `
+      // リストを表示
+      function displayProfessores(professor) {
+        const professoresList = document.getElementById('professoresList');
+        professoresList.innerHTML = '';
+        professor.forEach(professor => {
+          const professorElement = document.createElement('tr');
+          professorElement.innerHTML = `
                     <td>${professor.id_prof}</td>
                     <td>${professor.nome}</td>
                     <td>${professor.email_prof}</td>
@@ -203,129 +204,129 @@
                       <button onclick="deleteProfessor(${professor.Id_prof})">Excluir</button>
                     </td>
                 `;
-        professoresList.appendChild(professorElement);
+          professoresList.appendChild(professorElement);
+        });
+      }
+
+      // 取得
+      function getProfessores() {
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => displayProfessores(data))
+          .catch(error => console.error('Erro:', error));
+      }
+
+      // 追加
+      document.getElementById('addProfessorForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const professorName = document.getElementById('professorName').value;
+        const professorEmail = document.getElementById('professorEmail').value;
+        const professorCPF = document.getElementById('professorCPF').value;
+        const professorSubject = document.getElementById('professorSubject').value;
+        const professorPhone = document.getElementById('professorPhone').value;
+        const professorBirthdate = document.getElementById('professorBirthdate').value;
+        const professorPersonalEmail = document.getElementById('professorPersonalEmail').value;
+        const professorAddress = document.getElementById('professorAddress').value;
+
+        fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            Nome: professorName,
+            Email_constitucional: professorEmail,
+            CPF: professorCPF,
+            Materia_Lecionada: professorSubject,
+            Telefone: professorPhone,
+            Data_Nascimento: professorBirthdate,
+            Email_pessoal: professorPersonalEmail,
+            Endereco_Completo: professorAddress
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            getProfessores();
+            document.getElementById('addProfessorForm').reset();
+          })
+          .catch(error => console.error('Erro:', error));
       });
-    }
 
-    // 取得
-    function getProfessores() {
-      fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => displayProfessores(data))
-        .catch(error => console.error('Erro:', error));
-    }
+      function updateProfessor(id) {
+        fetch(`${apiUrl}/${id}`)
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('editProfessorId').value = data.Id_prof;
+            document.getElementById('editProfessorName').value = data.Nome;
+            document.getElementById('editProfessorEmail').value = data.Email_constitucional;
+            document.getElementById('editProfessorCPF').value = data.CPF;
+            document.getElementById('editProfessorSubject').value = data.Materia_Lecionada;
+            document.getElementById('editProfessorPhone').value = data.Telefone;
+            document.getElementById('editProfessorBirthdate').value = data.Data_Nascimento;
+            document.getElementById('editProfessorPersonalEmail').value = data.Email_pessoal;
+            document.getElementById('editProfessorAddress').value = data.Endereco_Completo;
+            document.getElementById('editProfessorForm').style.display = 'block';
+          })
+          .catch(error => console.error('Erro:', error));
+      }
 
-    // 追加
-    document.getElementById('addProfessorForm').addEventListener('submit', function (event) {
-      event.preventDefault();
-      const professorName = document.getElementById('professorName').value;
-      const professorEmail = document.getElementById('professorEmail').value;
-      const professorCPF = document.getElementById('professorCPF').value;
-      const professorSubject = document.getElementById('professorSubject').value;
-      const professorPhone = document.getElementById('professorPhone').value;
-      const professorBirthdate = document.getElementById('professorBirthdate').value;
-      const professorPersonalEmail = document.getElementById('professorPersonalEmail').value;
-      const professorAddress = document.getElementById('professorAddress').value;
+      // 実際に更新
+      document.getElementById('updateProfessorForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const professorId = document.getElementById('editProfessorId').value;
+        const professorName = document.getElementById('editProfessorName').value;
+        const professorEmail = document.getElementById('editProfessorEmail').value;
+        const professorCPF = document.getElementById('editProfessorCPF').value;
+        const professorSubject = document.getElementById('editProfessorSubject').value;
+        const professorPhone = document.getElementById('editProfessorPhone').value;
+        const professorBirthdate = document.getElementById('editProfessorBirthdate').value;
+        const professorPersonalEmail = document.getElementById('editProfessorPersonalEmail').value;
+        const professorAddress = document.getElementById('editProfessorAddress').value;
 
-      fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          Nome: professorName,
-          Email_constitucional: professorEmail,
-          CPF: professorCPF,
-          Materia_Lecionada: professorSubject,
-          Telefone: professorPhone,
-          Data_Nascimento: professorBirthdate,
-          Email_pessoal: professorPersonalEmail,
-          Endereco_Completo: professorAddress
+        fetch(`${apiUrl}/${professorId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            Nome: professorName,
+            Email_constitucional: professorEmail,
+            CPF: professorCPF,
+            Materia_Lecionada: professorSubject,
+            Telefone: professorPhone,
+            Data_Nascimento: professorBirthdate,
+            Email_pessoal: professorPersonalEmail,
+            Endereco_Completo: professorAddress
+          })
         })
-      })
-        .then(response => response.json())
-        .then(data => {
-          getProfessores();
-          document.getElementById('addProfessorForm').reset();
+          .then(response => response.json())
+          .then(data => {
+            getProfessores();
+            document.getElementById('editProfessorForm').style.display = 'none';
+          })
+          .catch(error => console.error('Erro:', error));
+      });
+
+      function cancelEdit() {
+        document.getElementById('editProfessorForm').style.display = 'none';
+      }
+
+      function deleteProfessor(id) {
+        fetch(`${apiUrl}/${id}`, {
+          method: 'DELETE'
         })
-        .catch(error => console.error('Erro:', error));
-    });
+          .then(response => response.json())
+          .then(data => {
+            getProfessores();
+          })
+          .catch(error => console.error('Erro:', error));
+      }
 
-    function updateProfessor(id) {
-      fetch(`${apiUrl}/${id}`)
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('editProfessorId').value = data.Id_prof;
-          document.getElementById('editProfessorName').value = data.Nome;
-          document.getElementById('editProfessorEmail').value = data.Email_constitucional;
-          document.getElementById('editProfessorCPF').value = data.CPF;
-          document.getElementById('editProfessorSubject').value = data.Materia_Lecionada;
-          document.getElementById('editProfessorPhone').value = data.Telefone;
-          document.getElementById('editProfessorBirthdate').value = data.Data_Nascimento;
-          document.getElementById('editProfessorPersonalEmail').value = data.Email_pessoal;
-          document.getElementById('editProfessorAddress').value = data.Endereco_Completo;
-          document.getElementById('editProfessorForm').style.display = 'block';
-        })
-        .catch(error => console.error('Erro:', error));
-    }
-
-    // 実際に更新
-    document.getElementById('updateProfessorForm').addEventListener('submit', function (event) {
-      event.preventDefault();
-      const professorId = document.getElementById('editProfessorId').value;
-      const professorName = document.getElementById('editProfessorName').value;
-      const professorEmail = document.getElementById('editProfessorEmail').value;
-      const professorCPF = document.getElementById('editProfessorCPF').value;
-      const professorSubject = document.getElementById('editProfessorSubject').value;
-      const professorPhone = document.getElementById('editProfessorPhone').value;
-      const professorBirthdate = document.getElementById('editProfessorBirthdate').value;
-      const professorPersonalEmail = document.getElementById('editProfessorPersonalEmail').value;
-      const professorAddress = document.getElementById('editProfessorAddress').value;
-
-      fetch(`${apiUrl}/${professorId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          Nome: professorName,
-          Email_constitucional: professorEmail,
-          CPF: professorCPF,
-          Materia_Lecionada: professorSubject,
-          Telefone: professorPhone,
-          Data_Nascimento: professorBirthdate,
-          Email_pessoal: professorPersonalEmail,
-          Endereco_Completo: professorAddress
-        })
-      })
-        .then(response => response.json())
-        .then(data => {
-          getProfessores();
-          document.getElementById('editProfessorForm').style.display = 'none';
-        })
-        .catch(error => console.error('Erro:', error));
-    });
-
-    function cancelEdit() {
-      document.getElementById('editProfessorForm').style.display = 'none';
-    }
-
-    function deleteProfessor(id) {
-      fetch(`${apiUrl}/${id}`, {
-        method: 'DELETE'
-      })
-        .then(response => response.json())
-        .then(data => {
-          getProfessores();
-        })
-        .catch(error => console.error('Erro:', error));
-    }
-
-    getProfessores();
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-    crossorigin="anonymous"></script>
+      getProfessores();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"></script>
 </body>
 
 </html>

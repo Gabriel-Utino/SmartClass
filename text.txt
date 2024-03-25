@@ -122,13 +122,38 @@ INSERT INTO Professor (nome, email_prof, materia_leci, CPF, telefone, data_de_na
 ('Jane Smith', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
 ('Michael Johnson', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
 
-INSERT INTO Professor (id_prof, nome, email_consitucional, materia_leci, CPF, telefone, data_de_nascimento, email_pess, endereco_completo) VALUES (4, 'AAAAAAAAA', 'AAAAAAA@example.com', 'AAAAA', '999.999.999-99', '(456) 789-0123', '1990-12-15', 'AAAAAAAAAAAAl@example.com', '789 Oak St')
-
 -- Disciplinaテーブルにレコードを追加
 INSERT INTO Disciplina (disciplina, id_prof) VALUES
 ('Algebra', 1),
 ('Quantum Mechanics', 2),
 ('Organic Chemistry', 3);
+
+-- Turmaテーブルへのデータ挿入
+INSERT INTO Turma (nome_turma)
+VALUES 
+    ('Turma A'),
+    ('Turma B'),
+    ('Turma C'),
+    ('Turma D'),
+    ('Turma E');
+
+-- Responsavelテーブルへのデータ挿入
+INSERT INTO Responsavel (nome_pesp, endereco_pesp, telefone_pesp, email_pesp)
+VALUES 
+    ('Maria Silva', 'Rua ABC, 123', '555-1234', 'maria.silva@example.com'),
+    ('José Santos', 'Av. XYZ, 456', '555-5678', 'jose.santos@example.com'),
+    ('Ana Oliveira', 'Praça 123, Apt 101', '555-9012', 'ana.oliveira@example.com'),
+    ('Carlos Pereira', 'Alameda ABC, 789', '555-3456', 'carlos.pereira@example.com'),
+    ('Fernanda Souza', 'Estrada XYZ, 987', '555-7890', 'fernanda.souza@example.com');
+
+INSERT INTO Aluno (nome_aluno, ra_aluno, endereco_aluno, telefone_aluno, email_aluno, id_turma, nacimento_aluno)
+VALUES 
+    ('John Doe', '123456', '123 Main Street', '555-1234', 'john.doe@example.com', 1, '1995-05-15'),
+    ('Jane Smith', '789012', '456 Elm Street', '555-5678', 'jane.smith@example.com', 2, '1996-07-20'),
+    ('Michael Johnson', '345678', '789 Oak Street', '555-9012', 'michael.johnson@example.com', 1, '1994-12-10'),
+    ('Emily Brown', '901234', '321 Pine Street', '555-3456', 'emily.brown@example.com', 3, '1997-03-25'),
+    ('David Wilson', '567890', '654 Maple Street', '555-7890', 'david.wilson@example.com', 2, '1993-08-05');
+
 
 -- Notaテーブルにレコードを追加
 INSERT INTO Nota (id_aluno, id_disciplina, n1, AI, AP, faltas) VALUES
@@ -150,6 +175,27 @@ VALUES
 ('EEEEEEEE', 'jane@example.com', 'Physics', '987.654.321-09', '(987) 654-3210', '1975-05-10', 'jane_personal@example.com', '456 Elm St'),
 ('FFFFFF', 'michael@example.com', 'Chemistry', '456.789.012-34', '(456) 789-0123', '1990-12-15', 'michael_personal@example.com', '789 Oak St');
 
+-- Aluno_Responsavelテーブルへのデータ挿入
+INSERT INTO Aluno_Responsavel (id_aluno, id_resp)
+VALUES 
+    (1, 1),  -- Aluno ID 1 と Responsavel ID 1 の関係
+    (2, 3),  -- Aluno ID 2 と Responsavel ID 3 の関係
+    (3, 2),  -- Aluno ID 3 と Responsavel ID 2 の関係
+    (4, 4),  -- Aluno ID 4 と Responsavel ID 4 の関係
+    (5, 5);  -- Aluno ID 5 と Responsavel ID 5 の関係
+
+-- Notaテーブルへのデータ挿入
+INSERT INTO Nota (id_aluno, id_disciplina, n1, AI, AP, faltas)
+VALUES 
+    (1, 1, 85.5, 78.3, 92.7, 5),   -- Aluno ID 1 の成績
+    (2, 2, 90.0, 85.5, 88.2, 2),    -- Aluno ID 2 の成績
+    (3, 3, 78.9, 92.4, 79.1, 7),    -- Aluno ID 3 の成績
+    (4, 1, 88.2, 79.8, 91.5, 3),    -- Aluno ID 4 の成績
+    (5, 2, 92.7, 88.0, 85.6, 1);    -- Aluno ID 5 の成績
+
+
+
+
 
 
 SELECT *
@@ -158,9 +204,11 @@ JOIN Disciplina ON Professor.id_prof = Disciplina.id_prof;
 
 
 
+-- テーブル 削除
+drop table aluno, aluno_responsavel, disciplina, nota, professor, responsavel, turma
 
-
-
+-- テーブル 削除
+drop table aluno_responsavel, nota, aluno, disciplina, professor, responsavel, turma
 
 
 
