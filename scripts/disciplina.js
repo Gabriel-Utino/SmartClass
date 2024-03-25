@@ -1,63 +1,38 @@
-// Initialize datepicker
-$(document).ready(function () {
-  $('#professorBirthdate').datepicker({
-    format: 'yyyy-mm-dd', // データベースに保存する形式に合わせて適切なフォーマットに設定します
-    autoclose: true
-  })
-})
-$(document).ready(function () {
-  $('#editProfessorBirthdate').datepicker({
-    format: 'yyyy-mm-dd', // データベースに保存する形式に合わせて適切なフォーマットに設定します
-    autoclose: true
-  })
-})
+const apiUrl = 'http://localhost:3000/disciplinas'
 
-const apiUrl = 'http://localhost:3000/professores'
 
 // リストを表示
-function displayProfessores(professor) {
-  const professoresList = document.getElementById('professoresList')
-  professoresList.innerHTML = ''
-  professor.forEach(professor => {
-    const professorElement = document.createElement('tr')
-    professorElement.innerHTML = `
-              <td>${professor.id_prof}</td>
-              <td>${professor.nome}</td>
-              <td>${professor.email_prof}</td>
-              <td>${professor.CPF}</td>
-              <td>${professor.materia_leci}</td>
-              <td>${professor.telefone}</td>
-              <td>${professor.data_de_nascimento}</td>
-              <td>${professor.email_pass}</td>
-              <td>${professor.endereco_prof}</td>
+function displayDisciplina(disciplina) {
+  const disciplinaList = document.getElementById('disciplinaList')
+  disciplinaList.innerHTML = ''
+  disciplina.forEach(disciplina => {
+    const disciplinaElement = document.createElement('tr')
+    disciplinaElement.innerHTML = `
+              <td>${disciplina.id_disciplina}</td>
+              <td>${disciplina.disciplina}</td>
+              <td>${disciplina.id_prof}</td>
               <td>
-                <button onclick="updateProfessor(${professor.id_prof})">Editar</button>
-                <button onclick="deleteProfessor(${professor.id_prof})">Excluir</button>
+                <button onclick="updateDisciplina(${disciplina.id_disciplina})">Editar</button>
+                <button onclick="deleteDisciplina(${disciplina.id_disciplina})">Excluir</button>
               </td>
           `
-    professoresList.appendChild(professorElement)
+          disciplinaList.appendChild(disciplinaElement)
   })
 }
 
 // 取得
-function getProfessores() {
+function getDisciplina() {
   fetch(apiUrl)
     .then(response => response.json())
-    .then(data => displayProfessores(data))
+    .then(data => displayDisciplina(data))
     .catch(error => console.error('Erro:', error))
 }
 
 // 追加
 document.getElementById('addDisciplinaForm').addEventListener('submit', function (event) {
   event.preventDefault()
-  const professorName = document.getElementById('professorName').value
-  const professorEmail = document.getElementById('professorEmail').value
-  const professorCPF = document.getElementById('professorCPF').value
-  const professorSubject = document.getElementById('professorSubject').value
-  const professorPhone = document.getElementById('professorPhone').value
-  const professorBirthdate = document.getElementById('professorBirthdate').value
-  const professorPersonalEmail = document.getElementById('professorPersonalEmail').value
-  const professorAddress = document.getElementById('professorAddress').value
+  const disciplinaName = document.getElementById('disciplinaName').value
+  const disciplinaProf = document.getElementById('disciplinaProf').value
 
   fetch(apiUrl, {
     method: 'POST',
@@ -65,19 +40,13 @@ document.getElementById('addDisciplinaForm').addEventListener('submit', function
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      nome: professorName,
-      email_prof: professorEmail,
-      CPF: professorCPF,
-      materia_leci: professorSubject,
-      telefone: professorPhone,
-      data_de_nascimento: professorBirthdate,
-      email_pass: professorPersonalEmail,
-      endereco_prof: professorAddress
+      disciplina: disciplinaName,
+      id_prof: disciplinaProf
     })
   })
     .then(response => response.json())
     .then(data => {
-      getProfessores()
+      getDisciplina()
       document.getElementById('addDisciplinaForm').reset()
     })
     .catch(error => console.error('Erro:', error))
@@ -110,7 +79,7 @@ function updateProfessor(id) {
 }
 
 // 実際に更新
-document.getElementById('updateProfessorForm').addEventListener('submit', function (event) {
+document.getElementById('updateDisciplinaForm').addEventListener('submit', function (event) {
   event.preventDefault()
   const professorId = document.getElementById('editProfessorId').value
   const professorName = document.getElementById('editProfessorName').value
@@ -140,28 +109,26 @@ document.getElementById('updateProfessorForm').addEventListener('submit', functi
   })
     .then(response => response.json())
     .then(data => {
-      getProfessores()
+      getDisciplina()
       document.getElementById('editProfessorForm').style.display = 'none'
     })
     .catch(error => console.error('Erro:', error))
 })
 
-function cancelEdit() {
-  document.getElementById('editProfessorForm').style.display = 'none'
-}
 
 // 削除ボタン
-function deleteProfessor(id_prof) {
+function deleteDisciplina(id_prof) {
   fetch(`${apiUrl}/${id_prof}`, {
     method: 'DELETE'
   })
     .then(response => response.json())
-    .then(data => getProfessores())
+    .then(data => getDisciplina())
     .catch(error => console.error('Erro:', error))
 }
 
-getProfessores()
+getDisciplina()
 
 function cancelEdit() {
-  document.getElementById('updateProfessorForm').reset()
+  document.getElementById('updateDisciplinaForm').reset()
 }
+

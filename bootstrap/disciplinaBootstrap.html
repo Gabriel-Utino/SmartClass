@@ -91,9 +91,7 @@
   </nav>
 
 
-
   <!-- 以下、ベースのHTMLファイルのコンテンツを続ける -->
-
   <div class="container">
     <h1>Lista de disciplinas</h1>
 
@@ -104,6 +102,7 @@
             <th>ID</th>
             <th>Nome da disciplina</th>
             <th>Nome do professor</th>
+            <th>Option</th>
           </tr>
         </thead>
         <tbody id="disciplinaList" class="overflow-auto">
@@ -116,71 +115,35 @@
 
     <!-- 入力欄 -->
     <div class="row">
-      <!-- Professorの追加 -->
+      <!-- Disciplinaの追加 -->
       <div class="col-md-6">
         <h2>Cadastrar nova disciplina</h2>
         <form id="addDisciplinaForm">
           <div class="form-group">
-            <input type="text" class="form-control" id="professorName" placeholder="Nome do professor" required>
+            <input type="text" class="form-control" id="disciplinaName" placeholder="Nome do Disciplina" required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="professorEmail" placeholder="Email Constitucional" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorCPF" placeholder="CPF" maxlength="14" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorSubject" placeholder="Matéria Lecionada" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorPhone" placeholder="Telefone" maxlength="20" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorBirthdate" placeholder="Data de Nascimento" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorPersonalEmail" placeholder="Email Pessoal" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="professorAddress" placeholder="Endereço Completo" required>
+            <select class="form-control" id="disciplinaProf" required>
+              <option value="" disabled selected>Escolha o professor</option>
+              <!-- プロフェッサーの選択肢をここに追加 -->
+            </select>
           </div>
           <button type="submit" class="btn btn-primary">Adicionar</button>
         </form>
       </div>
 
-      <!-- Professorの編集 -->
+      <!-- Disciplinaの編集 -->
       <div class="col-md-6">
         <h2>Editar</h2>
-        <form id="updateProfessorForm">
+        <form id="updateDisciplinaForm">
           <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorId" placeholder="ID do professor" required>
+            <input type="text" class="form-control" id="editDisciplinaId" placeholder="ID da Disciplina" required disabled>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorName" placeholder="Nome do professor" required>
+            <input type="text" class="form-control" id="editDisciplinaName" placeholder="Nome da Disciplina" required>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorEmail" placeholder="Email Constitucional" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorCPF" placeholder="CPF" maxlength="14" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorSubject" placeholder="Matéria Lecionada" required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorPhone" placeholder="Telefone" maxlength="20"
-              required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorBirthdate" placeholder="Data de Nascimento"
-              required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorPersonalEmail" placeholder="Email Pessoal"
-              required>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" id="editProfessorAddress" placeholder="Endereço Completo" required>
+            <input type="text" class="form-control" id="editDisciplinaProf" placeholder="Escolher o professor" required>
           </div>
           <button type="submit" class="btn btn-primary">Atualizar</button>
           <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancelar</button>

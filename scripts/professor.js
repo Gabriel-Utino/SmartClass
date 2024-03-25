@@ -16,8 +16,8 @@ const apiUrl = 'http://localhost:3000/professores'
 
 // リストを表示
 function displayProfessores(professor) {
-  const disciplinaList = document.getElementById('disciplinaList')
-  disciplinaList.innerHTML = ''
+  const professoresList = document.getElementById('professoresList')
+  professoresList.innerHTML = ''
   professor.forEach(professor => {
     const professorElement = document.createElement('tr')
     professorElement.innerHTML = `
@@ -35,7 +35,7 @@ function displayProfessores(professor) {
                 <button onclick="deleteProfessor(${professor.id_prof})">Excluir</button>
               </td>
           `
-    disciplinaList.appendChild(professorElement)
+    professoresList.appendChild(professorElement)
   })
 }
 
@@ -145,10 +145,6 @@ document.getElementById('updateProfessorForm').addEventListener('submit', functi
     })
     .catch(error => console.error('Erro:', error))
 })
-
-function cancelEdit() {
-  document.getElementById('editProfessorForm').style.display = 'none'
-}
 
 // 削除ボタン
 function deleteProfessor(id_prof) {
