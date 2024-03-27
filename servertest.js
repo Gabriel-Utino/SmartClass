@@ -28,7 +28,7 @@ let disciplinas = []
 let professores = []
 let notas = []
 let responsaveis = []
-
+let professorList = []
 
 // ここからはTurmaのサーバー管理に関わる部分 turma
 connection.query('SELECT * FROM turma;', (err, results) => {
@@ -294,11 +294,24 @@ app.delete('/professores/:id_prof', (req, res) => {
     res.status(404).json({ message: '見つかりません' })
   }
 })
-
+// ここからはProfessorListのサーバー管理に関わる部分 ProfessorList
+connection.query('SELECT id_prof, nome FROM professor;', (err, results) => {
+  if (err) {
+    console.error('Professorテーブルでエラー発生: ' + err)
+  } else {
+    professoresList = results
+  }
+})
+// リスト化 Professor
+app.get('/professoresList', (req, res) => {
+  res.json(professoresList)
+})
 
 
 // ここからはDisciplinaのサーバー管理に関わる部分 disciplinas
-connection.query('SELECT * FROM disciplina;', (err, results) => {
+connection.query(
+  'SELECT SELECT d.id_disciplina, d.disciplina, p.nome, p.id_prof FROM disciplina d join professor p on d.id_prof = p.id_prof from disciplina;', 
+  (err, results) => {
   if (err) {
     console.error('Disciplinaテーブルでエラー発生: ' + err)
   } else {
@@ -321,22 +334,22 @@ app.get('/disciplinas/:id_disciplina', (req, res) => {
 })
 // 追加 disciplinas
 app.post('/disciplinas', (req, res) => {
-  const newmateria = req.body
+  const newDisciplina  = req.body
   connection.query(
-    'INSERT INTO disciplina (id_disciplina, disciplina, id_prof) VALUES (?, ?, ?)',
-    [newmateria.id_disciplina, newmateria.disciplina, newmateria.id_prof],
+    'INSERT INTO disciplina (id_disciplina, disciplina, id_prof) VALUES (?, ?, ?);',
+    [newDisciplina.id_disciplina, newDisciplina.disciplina, newDisciplina.id_prof],
     (err, result) => {
       if (err) {
         console.error('Error adding data to MySQL: ' + err)
         if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-          res.status(400).json({ message: '指定された教授が存在しません。' })
+          res.status(400).json({ message: '存在しません' })
         } else {
-          res.status(500).json({ message: '商品を追加できませんでした' })
+          res.status(500).json({ message: '追加できませんでした' })
         }
       } else {
-        newmateria.id_disciplina = result.insertId
-        disciplinas.push(newmateria)
-        res.status(201).json(newmateria)
+        newDisciplina.id_disciplina = result.insertId
+        disciplinas.push(newDisciplina)
+        res.status(201).json(newDisciplina)
       }
     }
   )
@@ -348,7 +361,7 @@ app.put('/disciplinas/:id_disciplina', (req, res) => {
   const index = disciplinas.findIndex(disciplinas => disciplinas.id_disciplina === id_disciplina)
   if (index !== -1) {
     connection.query(
-      'UPDATE disciplina SET disciplina=?, id_prof=? WHERE id_disciplina=?',
+      'UPDATE disciplina SET disciplina=?, id_prof=? WHERE id_disciplina=? and',
       [updatedmateria.disciplina, updatedmateria.id_prof, id_disciplina],
       err => {
         if (err) {
