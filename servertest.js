@@ -294,23 +294,12 @@ app.delete('/professores/:id_prof', (req, res) => {
     res.status(404).json({ message: '見つかりません' })
   }
 })
-// ここからはProfessorListのサーバー管理に関わる部分 ProfessorList
-connection.query('SELECT id_prof, nome FROM professor;', (err, results) => {
-  if (err) {
-    console.error('Professorテーブルでエラー発生: ' + err)
-  } else {
-    professoresList = results
-  }
-})
-// リスト化 Professor
-app.get('/professoresList', (req, res) => {
-  res.json(professoresList)
-})
+
 
 
 // ここからはDisciplinaのサーバー管理に関わる部分 disciplinas
 connection.query(
-  'SELECT SELECT d.id_disciplina, d.disciplina, p.nome, p.id_prof FROM disciplina d join professor p on d.id_prof = p.id_prof from disciplina;', 
+  'SELECT d.id_disciplina, d.disciplina, p.nome, p.id_prof FROM disciplina d join professor p on d.id_prof = p.id_prof from disciplina;', 
   (err, results) => {
   if (err) {
     console.error('Disciplinaテーブルでエラー発生: ' + err)
