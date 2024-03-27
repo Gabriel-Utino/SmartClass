@@ -10,7 +10,7 @@ function displayDisciplina(disciplina) {
     disciplinaElement.innerHTML = `
               <td>${disciplina.id_disciplina}</td>
               <td>${disciplina.disciplina}</td>
-              <td>${disciplina.id_prof}</td>
+              <td>${disciplina.nome}</td>
               <td>
                 <button onclick="updateDisciplina(${disciplina.id_disciplina})">Editar</button>
                 <button onclick="deleteDisciplina(${disciplina.id_disciplina})">Excluir</button>
@@ -19,6 +19,7 @@ function displayDisciplina(disciplina) {
           disciplinaList.appendChild(disciplinaElement)
   })
 }
+// select de yaru ataraku yaruhituyougaaru 
 
 // 取得
 function getDisciplina() {
@@ -28,11 +29,13 @@ function getDisciplina() {
     .catch(error => console.error('Erro:', error))
 }
 
+
 // 追加
 document.getElementById('addDisciplinaForm').addEventListener('submit', function (event) {
   event.preventDefault()
   const disciplinaName = document.getElementById('disciplinaName').value
   const disciplinaProf = document.getElementById('disciplinaProf').value
+  const disciplinaProfNome = document.getElementById('disciplinaProfNome').value
 
   fetch(apiUrl, {
     method: 'POST',
@@ -41,7 +44,8 @@ document.getElementById('addDisciplinaForm').addEventListener('submit', function
     },
     body: JSON.stringify({
       disciplina: disciplinaName,
-      id_prof: disciplinaProf
+      id_prof: disciplinaProf,
+      nome: disciplinaProfNome
     })
   })
     .then(response => response.json())
